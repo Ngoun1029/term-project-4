@@ -1,5 +1,11 @@
 <?php
 
+use App\Http\Controllers\CodeController;
+use App\Http\Controllers\EmailController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\User\TaskController;
+use App\Http\Controllers\User\UserController;
+use Illuminate\Auth\Events\Login;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +23,28 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('/user-sign-up', [LoginController::class, 'signUp']);
+Route::post('/user-sign-in', [LoginController::class, 'signIn']);
+
+//email verification code
+Route::post('/email-verification', [EmailController::class, 'emailVerification']);
+
+//code verification
+Route::post('/code-verification-email', [CodeController::class, 'codeVerifiaction']);
+Route::post('/resend-code', [CodeController::class, 'create']);
+Route::delete('/remove-code-after-new-code', [CodeController::class, 'delete']);
+
+Route::middleware(['auth:sanctum'])->group(function () {
+
+    Route::get('/user-profile', [UserController::class, 'profile']);
+
+    //task
+    Route::post('/task-create', [TaskController::class, 'store']);
+    Route::post('/task-view/data', [TaskController::class, 'view']);
+    Route::post('/task-edit', [TaskController::class, 'edit']);
+    Route::get('/task-view-detail/{id}', [TaskController::class, 'show']);
+    Route::delete('/task-remove/{id}', [TaskController::class, 'destroy']);
+});
+
+Route::post('/user-sign-out', [LoginController::class, 'logout']);
