@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Events\TaskNotification;
 use App\Http\Controllers\Controller;
 use App\Models\Notification;
 use App\Models\Task;
@@ -132,6 +133,14 @@ class NotificationController extends Controller
             $notifications->created_at = Carbon::now();
             $notifications->updated_at = Carbon::now();
             $notifications->save();
+
+
+            broadcast(new TaskNotification(
+                $users->id,  // Pass the user ID to the event
+                $notifications->message,  // Pass the message to the event
+                $notifications->task_id,  // Pass the task ID to the event
+                $notifications->created_at  // Pass the created_at timestamp to the event
+            ));
             return response()->json([
                 'verified' => true,
                 'status' => 'success',
