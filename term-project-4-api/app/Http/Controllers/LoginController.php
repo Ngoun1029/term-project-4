@@ -20,7 +20,6 @@ class LoginController extends Controller
         $this->masterController = new MasterController();
     }
 
-
     /**
      * sign up
      */
@@ -139,13 +138,25 @@ class LoginController extends Controller
                     'users' => $users,
                     'user_details' => $user_details,
                     'token' => $users->createToken('authToken', [
+                        //user
                         'user:profile-view',
+                        'user:edit-user',
 
                         //task
                         'user:task-create',
                         'user:task-view',
                         'user:task-remove',
                         'user:task-edit',
+                        'user:task-view-detail',
+
+                        //notification
+                        'user:notification-view',
+                        'user:notification-read',
+                        'user:notification-remove',
+
+                        //setting
+                        'user:email-change',
+                        'user:password-change',
 
                     ])->plainTextToken
                 ];
@@ -231,12 +242,26 @@ class LoginController extends Controller
                 $signInData = [
                     'user' => $users,
                     'token' => $users->createToken('authToken', [
+                        //user
                         'user:profile-view',
+                        'user:edit-user',
+
                         // task
                         'user:task-create',
                         'user:task-view',
                         'user:task-remove',
                         'user:task-edit',
+                        'user:task-view-detail',
+
+                        //notification
+                        'user:notification-view',
+                        'user:notification-read',
+                        'user:notification-remove',
+
+                        //setting
+                        'user:email-change',
+                        'user:password-change',
+
                     ])->plainTextToken
                 ];
                 return response()->json([

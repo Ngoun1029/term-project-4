@@ -8,12 +8,13 @@ use App\Models\Task;
 use App\Models\User;
 use App\Models\UserDetail;
 use Carbon\Carbon;
-use Exception;
+
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Exception;
 
 class TaskController extends Controller
 {
@@ -187,9 +188,6 @@ class TaskController extends Controller
         }
     }
 
-
-
-
     /**
      * Display the specified resource.
      */
@@ -205,7 +203,15 @@ class TaskController extends Controller
             }
 
             if(Auth::user()->tokenCan('user:task-view-detail')){
-                
+                $tasks = Task::where('id', $id)->first();
+                return response()->json([
+                    'verified' => true,
+                    'status' => 'success',
+                    'message' => 'found',
+                    'data' => [
+                        'result' => $tasks,
+                    ]
+                ],200);
             }
             else {
                 return response()->json([

@@ -3,6 +3,8 @@
 use App\Http\Controllers\CodeController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\User\NotificationController;
+use App\Http\Controllers\User\SettingController;
 use App\Http\Controllers\User\TaskController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Auth\Events\Login;
@@ -37,7 +39,10 @@ Route::delete('/remove-code-after-new-code', [CodeController::class, 'delete']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
 
+    //user
     Route::get('/user-profile', [UserController::class, 'profile']);
+    Route::post('/user-edit', [UserController::class, 'edit']);
+
 
     //task
     Route::post('/task-create', [TaskController::class, 'store']);
@@ -45,6 +50,17 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/task-edit', [TaskController::class, 'edit']);
     Route::get('/task-view-detail/{id}', [TaskController::class, 'show']);
     Route::delete('/task-remove/{id}', [TaskController::class, 'destroy']);
+
+
+    //notification
+    Route::post('/notification-create', [NotificationController::class, 'store']);
+    Route::post('/notification-view/data', [NotificationController::class, 'view']);
+    Route::post('/notification-read', [NotificationController::class, 'read']);
+    Route::delete('/notification-remove/{id}', [NotificationController::class, 'destroy']);
+
+    //setting
+    Route::post('/email-changing', [SettingController::class, 'emailChange']);
+    Route::post('/password-changing', [SettingController::class, 'passwordChanging']);
 });
 
 Route::post('/user-sign-out', [LoginController::class, 'logout']);
