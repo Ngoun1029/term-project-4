@@ -66,7 +66,7 @@ class NotificationController extends Controller
 
             if (Auth::user()->tokenCan('user:notification-view')) {
                 $users = Auth::user();
-                $notifications = Notification::where('user_id', $users->id)->paginate($request->range);
+                $notifications = Notification::where('user_id', $users->id)->orderBy('created_at', 'desc')->paginate($request->range);
                 $taskId = $notifications->pluck('task_id');
                 $tasks = Task::whereIn('id', $taskId)->get()->keyBy('id');
 

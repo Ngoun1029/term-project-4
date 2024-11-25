@@ -14,6 +14,21 @@ use Illuminate\Support\Facades\Validator;
 
 class SettingController extends Controller
 {
+    /**
+     * email changing
+     */
+    public function userInformationEdit(){
+        try{
+        
+        }
+        catch (Exception $e) {
+            return response()->json([
+                'verified' => false,
+                'status' => 'error',
+                'message' => Str::limit($e->getMessage(), 150, '...'),
+            ], 500);
+        }
+    }
 
     /**
      * email changing
