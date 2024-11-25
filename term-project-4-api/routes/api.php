@@ -61,6 +61,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //setting
     Route::post('/email-changing', [SettingController::class, 'emailChange']);
     Route::post('/password-changing', [SettingController::class, 'passwordChanging']);
+    Route::post('/information-changing', [SettingController::class, 'userInformationEdit']); 
 });
 
 Route::post('/user-sign-out', [LoginController::class, 'logout']);
