@@ -30,8 +30,8 @@ class SettingController extends Controller
             $validator = Validator::make($request->all(), [
                 'first_name' => 'nullable|string',
                 'last_name'=>'nullable|string',
-                'birth_date' => 'nullable|string',
-                'contact' => 'nullable|string',
+                'birthdate' => 'nullable|string',
+                'contact' => 'required|string|regex:/^[0-9]+$/',
             ]);
 
             if($validator->fails()){
@@ -75,7 +75,7 @@ class SettingController extends Controller
                             'message' => 'forbidden'
                         ], 401);
                     }
-                    $user_details->birthdate = empty($request->birth_date) | null ? $user_details->birthdate : $request->birth_date;
+                    $user_details->birthdate = empty($request->birth_date) | null ? $user_details->birthdate : $request->birthdate;
                     $user_details->contact = empty($request->contact) |null ? $user_details->contact : $request->contact;
                     $user_details->created_at = Carbon::now();
                     $user_details->save();
@@ -121,7 +121,7 @@ class SettingController extends Controller
                 ]);
             }
             $validator = Validator::make($request->all(), [
-                'email' => 'required|string|email',
+                'new_email' => 'required|string|email',
                 'confirm_email' => 'required|string|email',
             ]);
             if ($validator->fails()) {
@@ -181,7 +181,7 @@ class SettingController extends Controller
     /**
      * password changing
      */
-    public function passwordChanging(Request $request)
+    public function passwordUpdateByEmailVerification(Request $request)
     {
         try {
             if (!Auth::check()) {
@@ -192,7 +192,7 @@ class SettingController extends Controller
                 ]);
             }
             $validator = Validator::make($request->all(), [
-                'password' => 'required|string',
+                'new_password' => 'required|string',
                 'confirm_password' => 'required|string',
             ]);
             if ($validator->fails()) {
@@ -204,7 +204,7 @@ class SettingController extends Controller
             }
 
             //password range checking
-            if (strlen($request->password) < 8 || strlen($request->password) > 16) {
+            if (strlen($request->new_password) < 8 || strlen($request->new_password) > 16) {
                 return response()->json([
                     'verified' => false,
                     'status' => 'error',
@@ -221,7 +221,7 @@ class SettingController extends Controller
                 ]);
             }
 
-            if(strcmp($request->confirm_password, $request->password)){
+            if(strcmp($request->confirm_password, $request->new_password)){
                 return response()->json([
                     'verified' => false,
                     'status' => 'error',
@@ -239,7 +239,7 @@ class SettingController extends Controller
                         'message' => 'forbidden',
                     ], 401);
                 }
-                $users->password = Hash::make($request->password);
+                $users->password = Hash::make($request->new_password);
                 $users->updated_at = Carbon::now();
                 $users->save();
                 return response()->json([

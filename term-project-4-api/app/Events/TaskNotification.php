@@ -17,17 +17,17 @@ class TaskNotification
     use Dispatchable, InteractsWithSockets, SerializesModels;
     public $userId;
     public $message;
-    public $taskId;
+    public $taskTitle;
     public $createdAt;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($userId, $message, $taskId, $createdAt)
+    public function __construct($userId, $message, $taskTitle, $createdAt)
     {
         $this->userId = $userId;
         $this->message = $message;
-        $this->taskId = $taskId;
+        $this->taskTitle = $taskTitle;
         $this->createdAt = $createdAt;
     }
 
@@ -38,14 +38,14 @@ class TaskNotification
      */
     public function broadcastOn()
     {
-        return new Channel('App.Models.User.' . $this->userId);
+        return new Channel('user.' . $this->userId);
     }
 
     public function broadcastWith()
     {
         return [
             'message' => $this->message,
-            'task_id' => $this->taskId,
+            'task_id' => $this->taskTitle,
             'created_at' => $this->createdAt,
         ];
     }

@@ -157,6 +157,7 @@ class LoginController extends Controller
                         //setting
                         'user:email-change',
                         'user:password-change',
+                        'user:information-edit',
 
                     ])->plainTextToken
                 ];
@@ -258,9 +259,10 @@ class LoginController extends Controller
                         'user:notification-read',
                         'user:notification-remove',
 
-                        //setting
-                        'user:email-change',
-                        'user:password-change',
+                       //setting
+                       'user:email-change',
+                       'user:password-change',
+                       'user:information-edit',
 
                     ])->plainTextToken
                 ];

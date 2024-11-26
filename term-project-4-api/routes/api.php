@@ -34,8 +34,8 @@ Route::post('/email-verification', [EmailController::class, 'emailVerification']
 
 //code verification
 Route::post('/code-verification-email', [CodeController::class, 'codeVerifiaction']);
-Route::post('/resend-code', [CodeController::class, 'create']);
-Route::delete('/remove-code-after-new-code', [CodeController::class, 'delete']);
+Route::post('/resend-verification-code', [CodeController::class, 'create']);
+Route::delete('/remove-verification-code', [CodeController::class, 'delete']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
 
@@ -53,15 +53,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 
     //notification
-    Route::post('/notification-create', [NotificationController::class, 'store']);
+    // Route::post('/notification-create', [NotificationController::class, 'store']);
     Route::post('/notification-view/data', [NotificationController::class, 'view']);
-    Route::post('/notification-read', [NotificationController::class, 'read']);
+    Route::put('/notification-read/{id}', [NotificationController::class, 'read']);
     Route::delete('/notification-remove/{id}', [NotificationController::class, 'destroy']);
 
     //setting
-    Route::post('/email-changing', [SettingController::class, 'emailChange']);
-    Route::post('/password-changing', [SettingController::class, 'passwordChanging']);
-    Route::post('/information-changing', [SettingController::class, 'userInformationEdit']); 
+    Route::post('/email-edit', [SettingController::class, 'emailChange']);
+    Route::post('/password-edit', [SettingController::class, 'passwordUpdateByEmailVerification']);
+    Route::post('/information-edit', [SettingController::class, 'userInformationEdit']);
 });
 
 Route::post('/user-sign-out', [LoginController::class, 'logout']);

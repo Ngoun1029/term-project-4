@@ -98,20 +98,20 @@ services:
     networks:
       - laravel
 
-# Ngrok
-  ngrok:
-    image: wernight/ngrok
-    container_name: ngrok-term_project_4-laravel
-    restart: unless-stopped
-    environment:
-      - NGROK_AUTHTOKEN=2lhG40Ua9jScjVnXJCjzzI04VNk_5g6xux4zJWECXJWCZ69yi
-      - NGROK_PORT=nginx:80                   # Tunnel Nginx port (8090 is mapped to 80 internally)
-    ports:
-      - "4040:4040"  # Expose Ngrok dashboard on localhost
-    depends_on:
-      - nginx
-    networks:
-      - laravel
+# # Ngrok
+#   ngrok:
+#     image: wernight/ngrok
+#     container_name: ngrok-term_project_4-laravel
+#     restart: unless-stopped
+#     environment:
+#       - NGROK_AUTHTOKEN=2lhG40Ua9jScjVnXJCjzzI04VNk_5g6xux4zJWECXJWCZ69yi
+#       - NGROK_PORT=nginx:80                   # Tunnel Nginx port (8090 is mapped to 80 internally)
+#     ports:
+#       - "4040:4040"  # Expose Ngrok dashboard on localhost
+#     depends_on:
+#       - nginx
+#     networks:
+#       - laravel
 
 networks:
   laravel:

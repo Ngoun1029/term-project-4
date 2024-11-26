@@ -134,7 +134,6 @@ class NotificationController extends Controller
             $notifications->updated_at = Carbon::now();
             $notifications->save();
 
-
             broadcast(new TaskNotification(
                 $users->id,  // Pass the user ID to the event
                 $notifications->message,  // Pass the message to the event
@@ -162,7 +161,7 @@ class NotificationController extends Controller
      * read
      */
 
-    public function read(Request $request){
+    public function read(string $id){
         try{
             if (!Auth::check()) {
                 return response()->json([
@@ -172,20 +171,20 @@ class NotificationController extends Controller
                 ]);
             }
 
-            $validator = Validator::make($request->all(), [
-                'notification_id' => 'required|numeric',
-            ]);
+            // $validator = Validator::make($request->all(), [
+            //     'notification_id' => 'required|numeric',
+            // ]);
 
-            if($validator->fails()){
-                return response()->json([
-                    'verified' => false,
-                    'status' => 'error',
-                    'message' => $validator->errors(),
-                ], 400);
-            }
+            // if($validator->fails()){
+            //     return response()->json([
+            //         'verified' => false,
+            //         'status' => 'error',
+            //         'message' => $validator->errors(),
+            //     ], 400);
+            // }
 
             if(Auth::user()->tokenCan('user:notification-read')){
-                $read = Notification::where('id', $request->notification_id)->first();
+                $read = Notification::where('id', $id)->first();
                 if(!$read){
                     return response()->json([
                         'verified' => false,
@@ -194,7 +193,7 @@ class NotificationController extends Controller
                     ], 404);
                 }
 
-                $read->mark_as_read = 1;
+                $read->mark_as_read = true;
                 $read->updated_at = Carbon::now();
                 $read->save();
                 return response()->json([
@@ -223,6 +222,8 @@ class NotificationController extends Controller
             ], 500);
         }
     }
+
+
 
     /**
      * Display the specified resource.

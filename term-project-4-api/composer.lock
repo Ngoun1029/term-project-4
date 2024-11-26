@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e1e9a9bb6e141f1eb7d03622ed2abc8f",
+    "content-hash": "15fd7bbbbd714914520408d6d9db13e0",
     "packages": [
         {
             "name": "brick/math",
@@ -1056,16 +1056,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v10.48.23",
+            "version": "v10.48.25",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "625269ca4881d2b50eded2045cb930960a181d98"
+                "reference": "f132b23b13909cc22c615c01b0c5640541c3da0c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/625269ca4881d2b50eded2045cb930960a181d98",
-                "reference": "625269ca4881d2b50eded2045cb930960a181d98",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/f132b23b13909cc22c615c01b0c5640541c3da0c",
+                "reference": "f132b23b13909cc22c615c01b0c5640541c3da0c",
                 "shasum": ""
             },
             "require": {
@@ -1172,7 +1172,7 @@
                 "nyholm/psr7": "^1.2",
                 "orchestra/testbench-core": "^8.23.4",
                 "pda/pheanstalk": "^4.0",
-                "phpstan/phpstan": "^1.4.7",
+                "phpstan/phpstan": "~1.11.11",
                 "phpunit/phpunit": "^10.0.7",
                 "predis/predis": "^2.0.2",
                 "symfony/cache": "^6.2",
@@ -1259,7 +1259,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2024-11-12T15:39:10+00:00"
+            "time": "2024-11-26T15:32:57+00:00"
         },
         {
             "name": "laravel/prompts",
@@ -1889,6 +1889,75 @@
             "time": "2024-09-21T08:32:55+00:00"
         },
         {
+            "name": "microweber-deps/laravel-cors",
+            "version": "v3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/microweber-deps/laravel-cors.git",
+                "reference": "0da3972222913272043d8cc21f2e695c93b5ac71"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/microweber-deps/laravel-cors/zipball/0da3972222913272043d8cc21f2e695c93b5ac71",
+                "reference": "0da3972222913272043d8cc21f2e695c93b5ac71",
+                "shasum": ""
+            },
+            "require": {
+                "fruitcake/php-cors": "^1.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "Fruitcake\\Cors\\CorsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Fruitcake\\Cors\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fruitcake",
+                    "homepage": "https://fruitcake.nl"
+                },
+                {
+                    "name": "Barry vd. Heuvel",
+                    "email": "barryvdh@gmail.com"
+                }
+            ],
+            "description": "Fork of fruitcake/laravel-cors  Adds CORS (Cross-Origin Resource Sharing) headers support in your Laravel application",
+            "keywords": [
+                "api",
+                "cors",
+                "crossdomain",
+                "laravel"
+            ],
+            "support": {
+                "source": "https://github.com/microweber-deps/laravel-cors/tree/v3.1"
+            },
+            "funding": [
+                {
+                    "url": "https://fruitcake.nl",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/barryvdh",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-01-26T17:04:55+00:00"
+        },
+        {
             "name": "monolog/monolog",
             "version": "3.8.0",
             "source": {
@@ -2306,32 +2375,32 @@
         },
         {
             "name": "nunomaduro/termwind",
-            "version": "v1.16.0",
+            "version": "v1.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nunomaduro/termwind.git",
-                "reference": "dcf1ec3dfa36137b7ce41d43866644a7ab8fc257"
+                "reference": "5369ef84d8142c1d87e4ec278711d4ece3cbf301"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nunomaduro/termwind/zipball/dcf1ec3dfa36137b7ce41d43866644a7ab8fc257",
-                "reference": "dcf1ec3dfa36137b7ce41d43866644a7ab8fc257",
+                "url": "https://api.github.com/repos/nunomaduro/termwind/zipball/5369ef84d8142c1d87e4ec278711d4ece3cbf301",
+                "reference": "5369ef84d8142c1d87e4ec278711d4ece3cbf301",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
                 "php": "^8.1",
-                "symfony/console": "^6.4.12"
+                "symfony/console": "^6.4.15"
             },
             "require-dev": {
-                "illuminate/console": "^10.48.22",
-                "illuminate/support": "^10.48.22",
-                "laravel/pint": "^1.18.1",
-                "pestphp/pest": "^2",
+                "illuminate/console": "^10.48.24",
+                "illuminate/support": "^10.48.24",
+                "laravel/pint": "^1.18.2",
+                "pestphp/pest": "^2.36.0",
                 "pestphp/pest-plugin-mock": "2.0.0",
-                "phpstan/phpstan": "^1.12.6",
+                "phpstan/phpstan": "^1.12.11",
                 "phpstan/phpstan-strict-rules": "^1.6.1",
-                "symfony/var-dumper": "^6.4.11",
+                "symfony/var-dumper": "^6.4.15",
                 "thecodingmachine/phpstan-strict-rules": "^1.0.0"
             },
             "type": "library",
@@ -2371,7 +2440,7 @@
             ],
             "support": {
                 "issues": "https://github.com/nunomaduro/termwind/issues",
-                "source": "https://github.com/nunomaduro/termwind/tree/v1.16.0"
+                "source": "https://github.com/nunomaduro/termwind/tree/v1.17.0"
             },
             "funding": [
                 {
@@ -2387,7 +2456,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-10-15T15:27:12+00:00"
+            "time": "2024-11-21T10:36:35+00:00"
         },
         {
             "name": "paragonie/sodium_compat",
@@ -5630,16 +5699,16 @@
         },
         {
             "name": "voku/portable-ascii",
-            "version": "2.0.1",
+            "version": "2.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/voku/portable-ascii.git",
-                "reference": "b56450eed252f6801410d810c8e1727224ae0743"
+                "reference": "b1d923f88091c6bf09699efcd7c8a1b1bfd7351d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/voku/portable-ascii/zipball/b56450eed252f6801410d810c8e1727224ae0743",
-                "reference": "b56450eed252f6801410d810c8e1727224ae0743",
+                "url": "https://api.github.com/repos/voku/portable-ascii/zipball/b1d923f88091c6bf09699efcd7c8a1b1bfd7351d",
+                "reference": "b1d923f88091c6bf09699efcd7c8a1b1bfd7351d",
                 "shasum": ""
             },
             "require": {
@@ -5664,7 +5733,7 @@
             "authors": [
                 {
                     "name": "Lars Moelleken",
-                    "homepage": "http://www.moelleken.org/"
+                    "homepage": "https://www.moelleken.org/"
                 }
             ],
             "description": "Portable ASCII library - performance optimized (ascii) string functions for php.",
@@ -5676,7 +5745,7 @@
             ],
             "support": {
                 "issues": "https://github.com/voku/portable-ascii/issues",
-                "source": "https://github.com/voku/portable-ascii/tree/2.0.1"
+                "source": "https://github.com/voku/portable-ascii/tree/2.0.3"
             },
             "funding": [
                 {
@@ -5700,7 +5769,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-03-08T17:03:00+00:00"
+            "time": "2024-11-21T01:49:47+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -5764,16 +5833,16 @@
     "packages-dev": [
         {
             "name": "fakerphp/faker",
-            "version": "v1.24.0",
+            "version": "v1.24.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FakerPHP/Faker.git",
-                "reference": "a136842a532bac9ecd8a1c723852b09915d7db50"
+                "reference": "e0ee18eb1e6dc3cda3ce9fd97e5a0689a88a64b5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FakerPHP/Faker/zipball/a136842a532bac9ecd8a1c723852b09915d7db50",
-                "reference": "a136842a532bac9ecd8a1c723852b09915d7db50",
+                "url": "https://api.github.com/repos/FakerPHP/Faker/zipball/e0ee18eb1e6dc3cda3ce9fd97e5a0689a88a64b5",
+                "reference": "e0ee18eb1e6dc3cda3ce9fd97e5a0689a88a64b5",
                 "shasum": ""
             },
             "require": {
@@ -5821,9 +5890,9 @@
             ],
             "support": {
                 "issues": "https://github.com/FakerPHP/Faker/issues",
-                "source": "https://github.com/FakerPHP/Faker/tree/v1.24.0"
+                "source": "https://github.com/FakerPHP/Faker/tree/v1.24.1"
             },
-            "time": "2024-11-07T15:11:20+00:00"
+            "time": "2024-11-21T13:46:39+00:00"
         },
         {
             "name": "filp/whoops",
@@ -5949,16 +6018,16 @@
         },
         {
             "name": "laravel/pint",
-            "version": "v1.18.2",
+            "version": "v1.18.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/pint.git",
-                "reference": "f55daaf7eb6c2f49ddf6702fb42e3091c64d8a64"
+                "reference": "cef51821608239040ab841ad6e1c6ae502ae3026"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/pint/zipball/f55daaf7eb6c2f49ddf6702fb42e3091c64d8a64",
-                "reference": "f55daaf7eb6c2f49ddf6702fb42e3091c64d8a64",
+                "url": "https://api.github.com/repos/laravel/pint/zipball/cef51821608239040ab841ad6e1c6ae502ae3026",
+                "reference": "cef51821608239040ab841ad6e1c6ae502ae3026",
                 "shasum": ""
             },
             "require": {
@@ -5969,13 +6038,13 @@
                 "php": "^8.1.0"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.64.0",
-                "illuminate/view": "^10.48.20",
-                "larastan/larastan": "^2.9.8",
+                "friendsofphp/php-cs-fixer": "^3.65.0",
+                "illuminate/view": "^10.48.24",
+                "larastan/larastan": "^2.9.11",
                 "laravel-zero/framework": "^10.4.0",
                 "mockery/mockery": "^1.6.12",
-                "nunomaduro/termwind": "^1.15.1",
-                "pestphp/pest": "^2.35.1"
+                "nunomaduro/termwind": "^1.17.0",
+                "pestphp/pest": "^2.36.0"
             },
             "bin": [
                 "builds/pint"
@@ -6011,20 +6080,20 @@
                 "issues": "https://github.com/laravel/pint/issues",
                 "source": "https://github.com/laravel/pint"
             },
-            "time": "2024-11-20T09:33:46+00:00"
+            "time": "2024-11-26T15:34:00+00:00"
         },
         {
             "name": "laravel/sail",
-            "version": "v1.38.0",
+            "version": "v1.39.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/sail.git",
-                "reference": "d17abae06661dd6c46d13627b1683a2924259145"
+                "reference": "be9d67a11133535811f9ec4ab5c176a2f47250fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/sail/zipball/d17abae06661dd6c46d13627b1683a2924259145",
-                "reference": "d17abae06661dd6c46d13627b1683a2924259145",
+                "url": "https://api.github.com/repos/laravel/sail/zipball/be9d67a11133535811f9ec4ab5c176a2f47250fc",
+                "reference": "be9d67a11133535811f9ec4ab5c176a2f47250fc",
                 "shasum": ""
             },
             "require": {
@@ -6074,7 +6143,7 @@
                 "issues": "https://github.com/laravel/sail/issues",
                 "source": "https://github.com/laravel/sail"
             },
-            "time": "2024-11-11T20:16:51+00:00"
+            "time": "2024-11-25T23:48:26+00:00"
         },
         {
             "name": "mockery/mockery",
