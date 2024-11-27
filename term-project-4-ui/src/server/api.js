@@ -40,7 +40,7 @@ export const signUp = async(SignUpParam) =>{
         },{
             headers: {
                 "X-CSRF-TOKEN": "",
-                "Content-Type": "application/json",
+                
             }
         });
         return response.data;

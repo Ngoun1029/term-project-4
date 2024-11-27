@@ -4,7 +4,7 @@ import axios from 'axios';
 // Use the BASE_URL from the environment variables
 const url = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,  // Access the base URL from the .env file
-  timeout: 10000,                          // Optional: Set timeout to 10 seconds
+  // timeout: 10000,                          // Optional: Set timeout to 10 seconds
  
 });
 
