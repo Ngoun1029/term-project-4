@@ -12,7 +12,7 @@ const url = axios.create({
 url.interceptors.request.use(
   (config) => {
     // Example: Add token to every request if available
-    const token = localStorage.getItem('authToken'); // Or get from any other storage
+    const token = localStorage.getItem('token'); // Or get from any other storage
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }

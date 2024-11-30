@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { signIn } from '../../server/api';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -7,6 +8,8 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,6 +22,8 @@ const Login = () => {
         console.log('data:', response.data.result);
         
         setSuccess('Login successful!');
+
+        navigate('/home')
         
         // Handle successful login (e.g., redirect or store token)
         // Example: localStorage.setItem('token', data.token);

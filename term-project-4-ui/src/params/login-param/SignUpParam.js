@@ -6,7 +6,7 @@ export const SignUpParam = {
     password : '',
     confirm_password : '',
     contact : '',
-    profile_picture:'',
+    // profile_picture: null,
     user_name : '',
     birthdate : '',
 }
