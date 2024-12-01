@@ -14,8 +14,8 @@ function App() {
     <PopupProvider>
       <Routes>
         <Route path='/home' element={<Home />} />
-        <Route path="/sign-in" element={<SignIn />} />
-        <Route path="/" element={<SignUp/>}/>
+        <Route path="/" element={<SignIn />} />
+        <Route path="/sign-up" element={<SignUp/>}/>
       </Routes>
       <CreateNewTask/>
       <EditTask/>

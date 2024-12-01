@@ -4,13 +4,17 @@ import { IoMdTime } from "react-icons/io";
 import { MdOutlineEmergencyShare } from "react-icons/md";
 import { LuPencilLine } from "react-icons/lu";
 import { usePopup } from '../context/PopupContext';
+import { MdOpenInNew } from "react-icons/md";
+import { taskCreate } from '../../server/api';
+import { TaskCreateParam } from '../../params/tasks-params/TaskCreateParam';
 
 export default function CreateNewTask() {
     // get data 
-    const [taskCategory, setTaskCategory] = useState('');
-    const [taskName, setTaskName] = useState('');
+    const [categories, setCategory] = useState('');
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
     const [deadline, setDeadline] = useState('');
-    const [emergentLevel, setEmergentLevel] = useState('');
+    const [emergent_level, setEmergent_level] = useState('');
 
     //popup
     const { setActivePopup, activePopup, hidePopup } = usePopup();
@@ -33,16 +37,24 @@ export default function CreateNewTask() {
     //popup 
     if (activePopup !== "createTask") return null;
 
-    const handleCategory = (category) => {
-        setTaskCategory(category);
-    }
+    const token = localStorage.getItem('token');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault();
+
         // Handle form submission for creating a task
-        const newTask = { taskCategory, taskName, deadline, emergentLevel };
-        console.log('Creating Task:', newTask);
-        hidePopup();
+        // const newTask = { categories, title, description, deadline, emergent_level };
+
+        const newTask = { ...TaskCreateParam, categories, title, description, deadline, emergent_level };
+        
+        try {
+            const response = await taskCreate(newTask, token);
+
+            console.log('Creating Task:', response);
+            hidePopup();
+        } catch(error) {
+            console.error('Error creating task ', error);
+        }
     }
 
     return (
@@ -56,18 +68,19 @@ export default function CreateNewTask() {
                             <span className='ms-3'>Category</span>
                         </div>
                         <div>
-                            <button
-                                type='button'
-                                onClick={() => handleCategory('group')}
-                                className={`py-2 px-8 me-3 bg-ligher-purple text-purple-800 hover:bg-purple-hover rounded-xl ${taskCategory === 'group' && 'bg-blue-hover'}`}>
-                                group
-                            </button>
-                            <button
-                                type='button'
-                                onClick={() => handleCategory('individual')}
-                                className={`py-2 px-8 bg-ligher-green text-green-800 hover:bg-green-hover rounded-xl ${taskCategory === 'individual' && 'bg-blue-hover'}`}>
-                                individual
-                            </button>
+                            <div>
+                                <select
+                                    id="categories"
+                                    onChange={(e) => setCategory(e.target.value)}
+                                    className="border border-slate-200 rounded-xl py-2 px-8 w-full"
+                                >
+                                    <option value="" disabled>
+                                        Task Type
+                                    </option>
+                                    <option value="individual">Individual</option>
+                                    <option value="group">Group</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div className="mb-3 flex items-center justify-between">
@@ -77,11 +90,25 @@ export default function CreateNewTask() {
                         </div>
                         <div>
                             <input
-                                id='taskName'
-                                onChange={(e) => setTaskName(e.target.value)}
+                                id='title'
+                                onChange={(e) => setTitle(e.target.value)}
                                 className="border border-slate-200 rounded-xl py-2 px-8"
                                 type="text"
                                 placeholder='task title' />
+                        </div>
+                    </div>
+                    <div className="mb-3 flex items-center justify-between">
+                        <div className='flex items-center opacity-75'>
+                            <MdOpenInNew />
+                            <span className='ms-3'>Description</span>
+                        </div>
+                        <div>
+                            <input
+                                type="text"
+                                id="description"
+                                onChange={(e) => setDescription(e.target.value)}
+                                className="border border-slate-200 rounded-xl py-2 px-8"
+                            />
                         </div>
                     </div>
                     <div className="mb-3 flex items-center justify-between">
@@ -105,16 +132,16 @@ export default function CreateNewTask() {
                         </div>
                         <div>
                             <select
-                                id="emergentLevel"
-                                onChange={(e) => setEmergentLevel(e.target.value)}
+                                id="emergent_level"
+                                onChange={(e) => setEmergent_level(e.target.value)}
                                 className="border border-slate-200 rounded-xl py-2 px-8 w-full"
                             >
                                 <option value="" disabled>
-                                    Select an option
+                                    Emergent Level
                                 </option>
-                                <option value="option1">Option 1</option>
-                                <option value="option2">Option 2</option>
-                                <option value="option3">Option 3</option>
+                                <option value="option1">1</option>
+                                <option value="option2">2</option>
+                                <option value="option3">3</option>
                             </select>
                         </div>
                     </div>

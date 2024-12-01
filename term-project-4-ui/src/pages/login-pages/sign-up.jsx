@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { signUp } from '../../server/api';
 import { useNavigate } from 'react-router-dom';
 
@@ -48,7 +49,7 @@ export default function SignUp() {
 
             if (response) {
                 setSuccess('Sign-up successful!');
-                navigate('/home')
+                navigate('/')
             } else {
                 setError('Sign-up failed. Please try again.');
             }
@@ -190,7 +191,7 @@ export default function SignUp() {
                     </div>
 
                     {/* Birthdate */}
-                    <div className="mb-6">
+                    <div className="mb-2">
                         <label htmlFor="birthdate" className="block text-sm font-semibold text-gray-700">
                             Birthdate:
                         </label>
@@ -203,6 +204,8 @@ export default function SignUp() {
                             className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
+
+                    <div className='mb-6 text-md'>Already have an account? <Link to='/' className='italic'>Log In</Link></div>
 
                     {/* Submit Button */}
                     <button

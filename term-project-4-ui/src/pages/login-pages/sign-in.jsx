@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { signIn } from '../../server/api';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -61,7 +61,7 @@ const Login = () => {
           </div>
 
           {/* Password Input */}
-          <div className="mb-6">
+          <div className="mb-2">
             <label htmlFor="password" className="block text-sm font-semibold text-gray-700">
               Password:
             </label>
@@ -75,6 +75,8 @@ const Login = () => {
               className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
+
+          <div className='mb-6 text-md'>Already have an account? <Link className='italic' to='/sign-up'>Sign Up</Link></div>
 
           {/* Submit Button */}
           <button
