@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { IoMdClose } from "react-icons/io";
+// import { IoMdClose } from "react-icons/io";
 import Sort from './content/Sort';
 import Tasks from './content/Tasks';
 

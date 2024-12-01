@@ -261,7 +261,7 @@ export const taskUpdate = async (TaskUpdateParam, token) => {
 
 export const taskDetail = async (taskId, token) => {
     try {
-        const response = await url.get(`/api/task-view-detail${taskId}`, {
+        const response = await url.get(`/api/task-view-detail/${taskId}`, {
             headers: {
                 "Authorization": `Bearer ${token}`,
                 "X-CSRF-TOKEN": "",
