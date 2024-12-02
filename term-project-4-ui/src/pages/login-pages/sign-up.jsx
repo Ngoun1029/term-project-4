@@ -22,6 +22,9 @@ export default function SignUp() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        //store email in local
+        localStorage.setItem('email', email);
+
         setLoading(true);
         setError('');
         setSuccess('');
@@ -49,7 +52,9 @@ export default function SignUp() {
 
             if (response) {
                 setSuccess('Sign-up successful!');
-                navigate('/')
+                // console.log(response);
+                
+                navigate('/email-verify')
             } else {
                 setError('Sign-up failed. Please try again.');
             }

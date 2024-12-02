@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { taskData } from '../../server/api';
-import { TaskDataParam } from '../../params/tasks-params/TaskDataParam';
 import { usePopup } from '../context/PopupContext';
 
 export default function DisplayTasks() {
@@ -98,23 +97,23 @@ export default function DisplayTasks() {
     }, []);
 
     return (
-        <div className="mt-8">
+        <div className="mt-8 h-[700px] overflow-y-auto">
             {loading ? (
-                <p>Loading...</p>
+                <p className='mt-20'>Loading...</p>
             ) : tasks.length === 0 ? (
-                <p>No tasks available.</p>
+                <p className='mt-20'>No tasks available.</p>
             ) : (
 
                 <div>
                     {/* card wrapper  */}
-                    <div className='flex gap-3'>
+                    <div className='flex flex-wrap gap-4 mt-20'>
 
                         {/* card  */}
                         {tasks.map(task => (
                             <div
                                 onClick={() => handleBtnVisibility(task.id)}
                                 key={task.id}
-                                className={`w-[300px] p-8 cursor-pointer rounded-xl ${activeTaskId === task.id ? 'bg-slate-200' : 'bg-slate-100'}`}>
+                                className={`w-[259px] p-8 cursor-pointer rounded-xl ${activeTaskId === task.id ? 'bg-slate-200' : 'bg-slate-100'}`}>
 
                                 {/* content  */}
                                 <div>
@@ -125,7 +124,7 @@ export default function DisplayTasks() {
                                 </div>
 
                                 {/* btn  */}
-                                <div className='absolute -bottom-[220px] right-[20px]'>
+                                <div className='absolute bottom-[40px] right-[20px]'>
                                     {activeTaskId === task.id && (
                                         <div className="flex">
                                             <button onClick={() => showPopup('editTask', task.id)} className='py-2 px-8 bg-lighter-blue text-black hover:bg-blue-hover rounded-lg me-2'>

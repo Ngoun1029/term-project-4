@@ -72,7 +72,6 @@ export const logout = async (token) => {
 }
 
 // otp
-
 export const emailVerification = async (EmailVerificationParam) => {
     const param = EmailVerificationParam;
     try {
@@ -148,7 +147,6 @@ export const removeVerificationCode = async (RemoveVerificationCodeParam) => {
 }
 
 //user
-
 export const userProfile = async (token) => {
     try {
         const response = await url.get('/api/user-profile', {
@@ -277,7 +275,7 @@ export const taskDetail = async (taskId, token) => {
 
 export const taskDelete = async (taskId, token) => {
     try {
-        const response = await url.delete(`/api/task-remove${taskId}`, {
+        const response = await url.delete(`/api/task-remove/${taskId}`, {
             headers: {
                 "Authorization": `Bearer ${token}`,
                 "X-CSRF-TOKEN": "",
@@ -292,7 +290,6 @@ export const taskDelete = async (taskId, token) => {
 }
 
 //notification
-
 export const notificationRead = async (notificationId, token) => {
     try {
         const response = await url.put(`/api/notification-read/${notificationId}`, {

@@ -8,6 +8,8 @@ import CreateNewTask from './components/actions/CreateNewTask';
 import { PopupProvider } from './components/context/PopupContext';
 import EditTask from './components/actions/EditTask';
 import DeleteTask from './components/actions/DeleteTask';
+import Profile from './pages/Profile';
+import EmailVerify from './pages/login-pages/EmailVerify';
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
         <Route path='/home' element={<Home />} />
         <Route path="/" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp/>}/>
+        <Route path='/profile' element={<Profile/>} />
+        <Route path='/email-verify' element={<EmailVerify/>} />
       </Routes>
       <CreateNewTask/>
       <EditTask/>

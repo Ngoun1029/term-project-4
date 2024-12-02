@@ -16,6 +16,8 @@ export default function CreateNewTask() {
   const [deadline, setDeadline] = useState("");
   const [emergent_level, setEmergent_level] = useState("");
 
+  const [loading, setLoading] = useState(false);
+
   // Popup context
   const { setActivePopup, activePopup, hidePopup } = usePopup();
 
@@ -42,6 +44,7 @@ export default function CreateNewTask() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       // Prepare payload
@@ -76,6 +79,8 @@ export default function CreateNewTask() {
         error.response?.data || error.message
       );
       alert("Failed to create task. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -88,25 +93,6 @@ export default function CreateNewTask() {
       >
         <h1 className="text-xl">Create New Task</h1>
         <div className="my-8">
-          {/* <div className="mb-3 flex items-center justify-between">
-                        <div className="flex items-center opacity-75">
-                            <TbCategoryPlus />
-                            <span className="ms-3">Category</span>
-                        </div>
-                        <div>
-                            <select
-                                id="categories"
-                                onChange={(e) => setCategory(e.target.value)}
-                                className="border border-slate-200 rounded-xl py-2 px-8 w-full"
-                            >
-                                <option value="" disabled>
-                                    Task Type
-                                </option>
-                                <option value="individual">Individual</option>
-                                <option value="group">Group</option>
-                            </select>
-                        </div>
-                    </div> */}
           <div className="mb-3 flex items-center justify-between">
             <div className="flex items-center opacity-75">
               <TbCategoryPlus />
@@ -115,8 +101,8 @@ export default function CreateNewTask() {
             <div>
               <select
                 id="categories"
-                value={categories} // Bind the value to the state
-                onChange={(e) => setCategory(e.target.value)} // Update the state on change
+                value={categories} 
+                onChange={(e) => setCategory(e.target.value)} 
                 className="border border-slate-200 rounded-xl py-2 px-8 w-full"
               >
                 <option value="" disabled>
@@ -203,7 +189,7 @@ export default function CreateNewTask() {
             type="submit"
             className="ms-3 bg-black text-white hover:text-[#ddd] py-2 px-8 rounded-lg"
           >
-            Create
+            {loading ? 'Creating..' : 'Create'}
           </button>
         </div>
       </form>

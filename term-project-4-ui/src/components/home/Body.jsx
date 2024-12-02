@@ -13,11 +13,10 @@ export default function Body() {
 
   return (
     <div className='ms-36'>
-      <div className={`fixed ${openLeftBar ? 'w-[60%]' : ' w-[85%]'}`}>
-        <Navbar openLeftBar={openLeftBar} handleToggleLeftBar={handleToggleLeftBar}/>
-        {/* <Schedualer /> */}
-        <DisplayTasks/>
+      <div className={` ${openLeftBar ? 'w-[68%]' : ' w-[85%]'}`}>
+        <Navbar openLeftBar={openLeftBar} handleToggleLeftBar={handleToggleLeftBar} />
       </div>
+      <DisplayTasks />
     </div>
   )
 }
