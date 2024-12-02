@@ -11,6 +11,7 @@ import DeleteTask from './components/actions/DeleteTask';
 import Profile from './pages/Profile';
 import EmailVerify from './pages/login-pages/EmailVerify';
 import EmailVerifyCode from './pages/login-pages/EmailVerifyCode';
+import TaskNotifications from './pages/notification-list-data';
 
 function App() {
   return (
@@ -22,6 +23,8 @@ function App() {
         <Route path='/profile' element={<Profile/>} />
         <Route path='/email-verify' element={<EmailVerify/>} />
         <Route path='/email-verify-code' element={<EmailVerifyCode/>}/>
+        <Route path='/notification' element={<TaskNotifications/>}/>
+        
       </Routes>
       <CreateNewTask/>
       <EditTask/>

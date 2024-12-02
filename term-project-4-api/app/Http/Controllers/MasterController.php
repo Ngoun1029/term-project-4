@@ -12,8 +12,6 @@ class MasterController extends Controller
     /**
      * upload image
      */
-
-
     public function uploadFile($file, $directory, $existingFileName)
     {
         if ($file) {

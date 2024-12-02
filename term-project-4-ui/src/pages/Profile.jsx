@@ -4,8 +4,10 @@ import ProfileSide from '../components/profile/ProfileSide'
 
 export default function Profile() {
     return (
-        <div className='max-w-[1230px] mx-auto my-5'>
-            <SideBar />
+        <div className='max-w-auto mx-auto my-5'>
+           <div className='m-2'>
+           <SideBar />
+           </div>
             <ProfileSide/>
         </div>
     )

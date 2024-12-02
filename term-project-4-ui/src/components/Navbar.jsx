@@ -36,7 +36,9 @@ export default function Navbar({ openLeftBar, handleToggleLeftBar }) {
                     <input type="text" placeholder='Search...' className='bg-slate-100 py-2 ps-10 pe-32 rounded-xl' />
                 </div>
                 <div className='flex items-center ms-[420px]'>
-                    <div className='p-4 hover:bg-lighter-blue cursor-pointer w-fit bg-slate-100 rounded-full text-xl'><IoNotificationsOutline /></div>
+                    <Link to='/notification'>
+                        <div className='p-4 hover:bg-lighter-blue cursor-pointer w-fit bg-slate-100 rounded-full text-xl'><IoNotificationsOutline /></div>
+                    </Link>
                     <div className='mx-4 flex items-center '>
                         <div>
                             <h1 className='text-xl' >{username}</h1>

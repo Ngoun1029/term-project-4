@@ -17,12 +17,10 @@ export const signIn = async (SignInParam) => {
 
         localStorage.setItem('token', response.data.data.result.token);
         return response.data;
-
     }
     catch (error) {
         console.log('error message:', error);
     }
-
 }
 
 export const signUp = async (SignUpParam) => {
@@ -61,7 +59,7 @@ export const logout = async (token) => {
             headers: {
                 "X-CSRF-TOKEN": "",
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`,
+                // "Authorization": `Bearer ${token}`,
             }
         });
         return response.data;

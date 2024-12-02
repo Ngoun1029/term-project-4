@@ -13,35 +13,43 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Set loading to true while making the request
+    setLoading(true);
 
     try {
-      const response = await signIn({ email, password }); // Call the signIn function
+      const response = await signIn({ email, password });
 
       if (response) {
         console.log('data:', response.data.result);
         
         setSuccess('Login successful!');
-
-        navigate('/home')
-        
-        // Handle successful login (e.g., redirect or store token)
-        // Example: localStorage.setItem('token', data.token);
+        navigate('/home');
       } else {
         setError(response?.message || 'An error occurred');
       }
     } catch (error) {
       setError('There was an error logging in!');
     } finally {
-      setLoading(false); // Set loading to false after request completion
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-96">
-        <h2 className="text-2xl font-bold text-center mb-6 text-blue-600">Login</h2>
-        
+    <div className="flex justify-center items-center min-h-screen bg-gray-50">
+      <div className="bg-white p-8 rounded-xl shadow-md max-w-md w-full">
+        <h2 className="text-2xl font-bold text-center mb-6 text-black">Sign In</h2>
+
+        {/* Error or Success Message */}
+        {error && (
+          <div className="text-red-500 text-center mb-4">
+            {error}
+          </div>
+        )}
+        {success && (
+          <div className="text-green-500 text-center mb-4">
+            {success}
+          </div>
+        )}
+
         {/* Login Form */}
         <form onSubmit={handleSubmit}>
           {/* Email Input */}
@@ -61,7 +69,7 @@ const Login = () => {
           </div>
 
           {/* Password Input */}
-          <div className="mb-2">
+          <div className="mb-4">
             <label htmlFor="password" className="block text-sm font-semibold text-gray-700">
               Password:
             </label>
@@ -76,21 +84,19 @@ const Login = () => {
             />
           </div>
 
-          <div className='mb-6 text-md'>Already have an account? <Link className='italic' to='/sign-up'>Sign Up</Link></div>
+          <div className="mb-6 text-md text-center">
+            Don't have an account? <Link className="italic text-blue-600" to="/sign-up">Sign Up</Link>
+          </div>
 
           {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 disabled:bg-blue-300"
+            className="w-full py-2 px-4 bg-black text-white font-semibold rounded-lg hover:bg-blue-600 disabled:bg-blue-300"
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
-
-        {/* Error or Success Message */}
-        {error && <div className="mt-4 text-red-500 text-center">{error}</div>}
-        {success && <div className="mt-4 text-green-500 text-center">{success}</div>}
       </div>
     </div>
   );

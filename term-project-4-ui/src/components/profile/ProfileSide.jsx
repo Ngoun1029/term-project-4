@@ -5,7 +5,9 @@ import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
 import { LiaBirthdayCakeSolid } from "react-icons/lia";
 import { FiPhone } from "react-icons/fi";
 import { BsPencilSquare } from "react-icons/bs";
-import { informationEdit, userProfile } from '../../server/api';
+import { informationEdit, userProfile, logout } from '../../server/api';
+import { useNavigate, Link } from 'react-router-dom';
+
 
 export default function ProfileSide() {
     // Edit data
@@ -16,6 +18,7 @@ export default function ProfileSide() {
     const [loading, setLoading] = useState(false);
     const [profilePicture, setProfilePicture] = useState('');
 
+    const navigate = useNavigate();
     // Toggle edit information
     const [editInfoContent, setEditInfoContent] = useState(false);
 
@@ -27,7 +30,7 @@ export default function ProfileSide() {
         setEditInfoContent(prev => !prev);
     };
 
-   
+    
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -108,135 +111,165 @@ export default function ProfileSide() {
         }
     };
 
-    return (
-        <div className="ms-36">
-            {/* User Profile */}
-            <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                    <img
-                        src={profilePicture} 
-                        alt="User Profile"
-                        className="object-fit w-[150px] h-[150px] border-[2px] border-black rounded-full"
-                    />
-                    <div className="ms-6">
-                        <h1 className="text-3xl font-medium">{userInfo?.first_name} {userInfo?.last_name}</h1>
-                        <p className="opacity-50 italic text-md">@{userInfo?.user_details?.user_name}</p>
-                    </div>
-                </div>
-                <div>
-                    <button
-                        className="flex items-center hover:bg-blue-hover bg-lighter-blue text-sky-800 rounded-xl py-2 px-8"
-                        onClick={handleToggleContent}
-                    >
-                        <span>Edit Profile</span>
-                        <span className="ms-1 text-lg"><AiOutlineEdit /></span>
-                    </button>
-                </div>
-            </div>
+    const handleLogout = async () => {
+        const token = localStorage.getItem('token');
+        try {
+            await logout(token);
+            localStorage.removeItem('token');  // Clear the token from local storage
+            navigate('/');  // Redirect to login page
+        } catch (error) {
+            console.error("Error during logout:", error);
+            alert("Logout failed. Please try again.");
+        }
+    };
 
-            {/* Edit Profile Form */}
-            {editInfoContent ? (
-                <div className="mt-14 w-[600px]">
-                    <h1 className="text-2xl mb-6">Edit Details</h1>
-                    <form onSubmit={handleEditInfo}>
-                        <div className="flex mb-3 justify-between">
-                            <div className="flex flex-col">
-                                <label className="flex items-center">
-                                    <MdOutlineDriveFileRenameOutline className="me-3" />
-                                    <span>First Name</span>
-                                </label>
-                                <input
-                                    type="text"
-                                    value={fname}
-                                    onChange={(e) => setFname(e.target.value)}
-                                    className="bg-slate-100 rounded-xl py-2 px-8 mt-2 border-[1px] border-gray-200"
-                                />
-                            </div>
-                            <div className="flex flex-col">
-                                <label className="flex items-center">
-                                    <MdOutlineDriveFileRenameOutline className="me-3" />
-                                    <span>Last Name</span>
-                                </label>
-                                <input
-                                    type="text"
-                                    value={lname}
-                                    onChange={(e) => setLname(e.target.value)}
-                                    className="bg-slate-100 rounded-xl py-2 px-8 mt-2 border-[1px] border-gray-200"
-                                />
-                            </div>
-                        </div>
-                        <div className="flex flex-col mb-3">
-                            <label className="flex items-center">
-                                <FiPhone className="me-3" />
-                                <span>Contact</span>
-                            </label>
-                            <input
-                                type="text"
-                                value={contact}
-                                onChange={(e) => setContact(e.target.value)}
-                                className="bg-slate-100 rounded-xl py-2 px-8 mt-2 border-[1px] border-gray-200"
-                            />
-                        </div>
-                        <div className="flex flex-col mb-3">
-                            <label className="flex items-center">
-                                <LiaBirthdayCakeSolid className="me-3" />
-                                <span>Birthdate</span>
-                            </label>
-                            <input
-                                type="date"
-                                value={birthdate}
-                                onChange={(e) => setBirthdate(e.target.value)}
-                                className="bg-slate-100 rounded-xl py-2 px-8 mt-2 border-[1px] border-gray-200"
-                            />
-                        </div>
-                        <div className="flex justify-end mt-8">
-                            <button
-                                type="button"
-                                onClick={handleToggleContent}
-                                className="py-2 px-8 rounded-xl bg-lighter-blue text-black hover:bg-blue-hover me-3"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                type="submit"
-                                disabled={loading}
-                                className="py-2 px-8 rounded-xl bg-black text-white hover:text-[#ddd]"
-                            >
-                                {loading ? 'Editing...' : 'Edit'}
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            ) : (
-                <div className="mt-14 p-8 rounded-xl bg-slate-100 w-[600px]">
-                    <div className="flex items-start justify-between">
-                        <h1 className="text-2xl mb-6">Account Details</h1>
-                        <BsPencilSquare
-                            className="text-lg mt-2 cursor-pointer hover:text-[#4a4a4a]"
-                            onClick={handleToggleContent}
-                        />
-                    </div>
-                    <ul className="flex flex-col gap-3 opacity-75">
-                        <li className="flex">
-                            <div className="flex items-center">
-                                <MdOutlineDriveFileRenameOutline className="me-3" />
-                                <span>First Name: {userInfo?.first_name}</span>
-                            </div>
-                            <div className="ms-6">
-                                <span>Last Name: {userInfo?.last_name}</span>
-                            </div>
-                        </li>
-                        <li className="flex items-center">
-                            <FiPhone className="me-3" />
-                            <span>Contact: {userInfo?.user_details?.contact}</span>
-                        </li>
-                        <li className="flex items-center">
-                            <LiaBirthdayCakeSolid className="me-3" />
-                            <span>Birthday: {formatDate(userInfo?.user_details?.birthdate)}</span>
-                        </li>
-                    </ul>
-                </div>
-            )}
+    return (
+      <div className="ms-36">
+        {/* User Profile */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <img
+              src={profilePicture}
+              alt="User Profile"
+              className="object-fit w-[150px] h-[150px] border-[2px] border-black rounded-full"
+            />
+            <div className="ms-6">
+              <h1 className="text-3xl font-medium">
+                {userInfo?.first_name} {userInfo?.last_name}
+              </h1>
+              <p className="opacity-50 italic text-md">
+                @{userInfo?.user_details?.user_name}
+              </p>
+            </div>
+          </div>
+          <div>
+            <button
+              className="flex items-center hover:bg-blue-hover bg-lighter-blue text-sky-800 rounded-xl py-2 px-8"
+              onClick={handleToggleContent}
+            >
+              <span>Edit Profile</span>
+              <span className="ms-1 text-lg">
+                <AiOutlineEdit />
+              </span>
+            </button>
+          </div>
         </div>
+
+        {/* Edit Profile Form */}
+        {editInfoContent ? (
+          <div className="mt-14 w-[600px]">
+            <h1 className="text-2xl mb-6">Edit Details</h1>
+            <form onSubmit={handleEditInfo}>
+              <div className="flex mb-3 justify-between">
+                <div className="flex flex-col">
+                  <label className="flex items-center">
+                    <MdOutlineDriveFileRenameOutline className="me-3" />
+                    <span>First Name</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={fname}
+                    onChange={(e) => setFname(e.target.value)}
+                    className="bg-slate-100 rounded-xl py-2 px-8 mt-2 border-[1px] border-gray-200"
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <label className="flex items-center">
+                    <MdOutlineDriveFileRenameOutline className="me-3" />
+                    <span>Last Name</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={lname}
+                    onChange={(e) => setLname(e.target.value)}
+                    className="bg-slate-100 rounded-xl py-2 px-8 mt-2 border-[1px] border-gray-200"
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col mb-3">
+                <label className="flex items-center">
+                  <FiPhone className="me-3" />
+                  <span>Contact</span>
+                </label>
+                <input
+                  type="text"
+                  value={contact}
+                  onChange={(e) => setContact(e.target.value)}
+                  className="bg-slate-100 rounded-xl py-2 px-8 mt-2 border-[1px] border-gray-200"
+                />
+              </div>
+              <div className="flex flex-col mb-3">
+                <label className="flex items-center">
+                  <LiaBirthdayCakeSolid className="me-3" />
+                  <span>Birthdate</span>
+                </label>
+                <input
+                  type="date"
+                  value={birthdate}
+                  onChange={(e) => setBirthdate(e.target.value)}
+                  className="bg-slate-100 rounded-xl py-2 px-8 mt-2 border-[1px] border-gray-200"
+                />
+              </div>
+              <div className="flex justify-end mt-8">
+                <button
+                  type="button"
+                  onClick={handleToggleContent}
+                  className="py-2 px-8 rounded-xl bg-lighter-blue text-black hover:bg-blue-hover me-3"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="py-2 px-8 rounded-xl bg-black text-white hover:text-[#ddd]"
+                >
+                  {loading ? "Editing..." : "Edit"}
+                </button>
+              </div>
+            </form>
+          </div>
+        ) : (
+          <div className="mt-14 p-8 rounded-xl bg-slate-100 w-[600px]">
+            <div className="flex items-start justify-between">
+              <h1 className="text-2xl mb-6">Account Details</h1>
+              <BsPencilSquare
+                className="text-lg mt-2 cursor-pointer hover:text-[#4a4a4a]"
+                onClick={handleToggleContent}
+              />
+            </div>
+            <ul className="flex flex-col gap-3 opacity-75">
+              <li className="flex">
+                <div className="flex items-center">
+                  <MdOutlineDriveFileRenameOutline className="me-3" />
+                  <span>First Name: {userInfo?.first_name}</span>
+                </div>
+                <div className="ms-6">
+                  <span>Last Name: {userInfo?.last_name}</span>
+                </div>
+              </li>
+              <li className="flex items-center">
+                <FiPhone className="me-3" />
+                <span>Contact: {userInfo?.user_details?.contact}</span>
+              </li>
+              <li className="flex items-center">
+                <LiaBirthdayCakeSolid className="me-3" />
+                <span>
+                  Birthday: {formatDate(userInfo?.user_details?.birthdate)}
+                </span>
+              </li>
+            </ul>
+           
+          </div>
+          
+        )}
+         <div className="mt-8 flex justify-start">
+              <button
+                onClick={handleLogout}
+                className="py-2 px-8 rounded-xl bg-red-600 text-white hover:bg-red-700"
+              >
+                Logout
+              </button>
+            </div>
+      </div>
     );
 }

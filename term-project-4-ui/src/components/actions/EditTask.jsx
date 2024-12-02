@@ -119,7 +119,7 @@ export default function EditTask() {
         onSubmit={handleSubmit}
         className="p-8 bg-gray-50 w-[500px] rounded-xl"
       >
-        <h1 className="text-xl">Edit Task {currentTaskId}</h1>
+        <h1 className="text-xl">Task Details: {task.title}</h1>
         <div className="my-8">
           <div className="mb-3 flex items-center justify-between">
             <div className="flex items-center opacity-75">
@@ -206,6 +206,8 @@ export default function EditTask() {
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
               </select>
             </div>
           </div>

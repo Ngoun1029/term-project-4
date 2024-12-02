@@ -31,7 +31,7 @@ class SettingController extends Controller
                 'first_name' => 'nullable|string',
                 'last_name'=>'nullable|string',
                 'birthdate' => 'nullable|string',
-                'contact' => 'required|string|regex:/^[0-9]+$/',
+                'contact' => 'nullable|string|regex:/^[0-9]+$/',
             ]);
 
             if($validator->fails()){
