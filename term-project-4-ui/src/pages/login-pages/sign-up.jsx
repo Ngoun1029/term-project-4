@@ -51,8 +51,10 @@ export default function SignUp() {
             const response = await signUp(userSignUp);
 
             if (response) {
+               
                 setSuccess('Sign-up successful!');
                 // console.log(response);
+                localStorage.setItem('email', email);
                 
                 navigate('/email-verify')
             } else {

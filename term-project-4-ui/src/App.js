@@ -10,6 +10,7 @@ import EditTask from './components/actions/EditTask';
 import DeleteTask from './components/actions/DeleteTask';
 import Profile from './pages/Profile';
 import EmailVerify from './pages/login-pages/EmailVerify';
+import EmailVerifyCode from './pages/login-pages/EmailVerifyCode';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/sign-up" element={<SignUp/>}/>
         <Route path='/profile' element={<Profile/>} />
         <Route path='/email-verify' element={<EmailVerify/>} />
+        <Route path='/email-verify-code' element={<EmailVerifyCode/>}/>
       </Routes>
       <CreateNewTask/>
       <EditTask/>

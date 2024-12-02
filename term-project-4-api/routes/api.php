@@ -43,7 +43,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user-profile', [UserController::class, 'profile']);
     Route::post('/user-edit', [UserController::class, 'edit']);
 
-
     //task
     Route::post('/task-create', [TaskController::class, 'store']);
     Route::post('/task-view/data', [TaskController::class, 'view']);

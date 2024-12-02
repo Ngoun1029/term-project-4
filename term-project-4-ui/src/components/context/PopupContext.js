@@ -21,7 +21,7 @@ export const PopupProvider = ({ children }) => {
 
     const showPopup = (popupType, taskId = null) => {
         setActivePopup(popupType);
-        setCurrentTaskId(popupType === 'editTask' || popupType === 'deleteTask' ? taskId : null);
+        setCurrentTaskId(popupType === 'editTask' ? taskId:null || popupType === 'deleteTask' ? taskId : null );
     };
 
 

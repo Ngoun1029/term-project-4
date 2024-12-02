@@ -22,7 +22,7 @@ export default function SideBar() {
     }
 
     return (
-        <div className='bg-main-bg fixed py-8 px-6 h-[520px] rounded-3xl w-fit'>
+        <div className='bg-main-bg fixed py-8 px-6 h-full rounded-3xl w-auto'>
             <div className='flex flex-col gap-5'>
 
                 <div 

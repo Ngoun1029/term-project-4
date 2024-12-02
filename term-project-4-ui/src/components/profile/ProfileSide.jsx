@@ -14,6 +14,7 @@ export default function ProfileSide() {
     const [contact, setContact] = useState('');
     const [birthdate, setBirthdate] = useState('');
     const [loading, setLoading] = useState(false);
+    const [profilePicture, setProfilePicture] = useState('');
 
     // Toggle edit information
     const [editInfoContent, setEditInfoContent] = useState(false);
@@ -26,30 +27,7 @@ export default function ProfileSide() {
         setEditInfoContent(prev => !prev);
     };
 
-    // Fetch user information on component mount
-    // useEffect(() => {
-    //     const fetchUserData = async () => {
-    //         setLoading(true);
-    //         const token = localStorage.getItem('token');
-
-    //         try {
-    //             const response = await userProfile(token);
-    //             setUserInfo(response.data.result);
-
-    //             // Prepopulate form fields
-    //             setFname(response.data.result.first_name || '');
-    //             setLname(response.data.result.last_name || '');
-    //             setContact(response.data.result.user_details?.contact || '');
-    //             setBirthdate(response.data.result.user_details?.birthdate || '');
-    //         } catch (error) {
-    //             console.error("Error fetching user info:", error);
-    //         } finally {
-    //             setLoading(false);
-    //         }
-    //     };
-
-    //     fetchUserData();
-    // }, []);
+   
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -58,8 +36,11 @@ export default function ProfileSide() {
 
             try {
                 const response = await userProfile(token);
+            
                 setUserInfo(response.data.result);
 
+                setProfilePicture(response?.data?.result?.user_details?.profile_picture);
+                
                 // Prepopulate form fields
                 setFname(response.data.result.first_name || '');
                 setLname(response.data.result.last_name || '');
@@ -133,7 +114,7 @@ export default function ProfileSide() {
             <div className="flex items-center justify-between">
                 <div className="flex items-center">
                     <img
-                        src={assets.pf}
+                        src={profilePicture} 
                         alt="User Profile"
                         className="object-fit w-[150px] h-[150px] border-[2px] border-black rounded-full"
                     />
