@@ -4,6 +4,7 @@ import { TbCategoryPlus } from "react-icons/tb";
 import { LuPencilLine } from "react-icons/lu";
 import { MdOpenInNew, MdOutlineEmergencyShare } from "react-icons/md";
 import { IoMdTime } from "react-icons/io";
+import { usePopup } from "../context/PopupContext";
 
 export default function TaskDetailModal({ taskId }) {
   const [categories, setCategory] = useState("");
@@ -40,10 +41,10 @@ export default function TaskDetailModal({ taskId }) {
     }
   };
 
-  //   const handleSubmit = (e) => {
-  //     e.preventDefault();
-  //     // Handle form submission here (e.g., create or update task)
-  //   };
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      // Handle form submission here (e.g., create or update task)
+    };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

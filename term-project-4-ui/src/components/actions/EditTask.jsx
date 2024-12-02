@@ -7,12 +7,13 @@ import { usePopup } from "../context/PopupContext";
 import { taskDetail, taskUpdate } from "../../server/api";
 
 export default function EditTask() {
-  const [categories, setCategory] = useState("");
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [deadline, setDeadline] = useState("");
-  const [emergent_level, setEmergentLevel] = useState("");
+  const [categories, setCategory] = useState("loading..");
+  const [title, setTitle] = useState("loading..");
+  const [description, setDescription] = useState("loading..");
+  const [deadline, setDeadline] = useState("loading..");
+  const [emergent_level, setEmergentLevel] = useState("loading..");
   const [progress, setProgress] = useState("");
+  const [task, setTask] = useState('');
 
   const [loading, setLoading] = useState(false);
 
@@ -39,13 +40,20 @@ export default function EditTask() {
   useEffect(() => {
     if (currentTaskId && activePopup === "editTask") {
       fetchTaskDetails();
+    } else {
+      resetFormFields();
     }
   }, [currentTaskId, activePopup]);
 
   const fetchTaskDetails = async () => {
     try {
-      const response = await taskDetail({ task_id: currentTaskId }, token);
-      const task = response?.data;
+      // const response = await taskDetail({ task_id: currentTaskId }, token);
+      const response = await taskDetail(currentTaskId, token);
+      const task = response?.data?.result;
+
+      setTask(task);
+      console.log('task popup', task);
+      
       if (task) {
         setCategory(task.categories || "");
         setTitle(task.title || "");
@@ -59,10 +67,20 @@ export default function EditTask() {
     }
   };
 
+  //clear form
+  const resetFormFields = () => {
+    setCategory("Loading...");
+    setTitle("Loading...");
+    setDescription("Loading...");
+    setDeadline("Loading...");
+    setEmergentLevel("Loading...");
+    setProgress("");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
+
     try {
       const param = {
         task_id: currentTaskId,
@@ -86,7 +104,7 @@ export default function EditTask() {
     } catch (error) {
       console.error("Error updating task:", error);
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
   };
 
@@ -135,7 +153,6 @@ export default function EditTask() {
                 onChange={(e) => setTitle(e.target.value)}
                 className="border border-slate-200 rounded-xl py-2 px-8"
                 type="text"
-                placeholder="Task title"
               />
             </div>
           </div>
@@ -165,6 +182,7 @@ export default function EditTask() {
                 id="deadline"
                 value={deadline}
                 onChange={(e) => setDeadline(e.target.value)}
+                placeholder={task.deadline}
                 className="border border-slate-200 rounded-xl py-2 px-8"
               />
             </div>
@@ -178,6 +196,7 @@ export default function EditTask() {
               <select
                 id="emergent_level"
                 value={emergent_level}
+                placeholder={task.emergent_level}
                 onChange={(e) => setEmergentLevel(e.target.value)}
                 className="border border-slate-200 rounded-xl py-2 px-8 w-full"
               >
@@ -191,7 +210,7 @@ export default function EditTask() {
             </div>
           </div>
         </div>
-        <div className="flex justify-end">
+        {/* <div className="flex justify-end">
           <button
             onClick={hidePopup}
             className="bg-lighter-blue text-black hover:bg-blue-hover py-2 px-8 rounded-lg"
@@ -203,6 +222,25 @@ export default function EditTask() {
             className="ms-3 bg-black text-white hover:text-[#ddd] py-2 px-8 rounded-lg"
           >
              {loading ? 'Saving..' : 'Save'}
+          </button>
+        </div> */}
+        <div className="flex justify-end">
+          <button
+            onClick={hidePopup}
+            className="bg-lighter-blue text-black hover:bg-blue-hover py-2 px-8 rounded-lg"
+          >
+            Cancel
+          </button>
+          <button
+            className="bg-lighter-blue mx-3 text-black hover:bg-blue-hover py-2 px-8 rounded-lg"
+          >
+            {loading ? 'Delete..' : 'Delete'}
+          </button>
+          <button
+            type="submit"
+            className=" bg-black text-white hover:text-[#ddd] py-2 px-8 rounded-lg"
+          >
+            {loading ? 'Editing..' : 'Edit'}
           </button>
         </div>
       </form>

@@ -81,11 +81,10 @@ export default function DisplayTasks() {
                     <div className="flex flex-wrap gap-4 mt-20">
                         {tasks.map((task) => (
                             <div
-                                onClick={() => handleBtnVisibility(task.id)}
+                                onClick={() => showPopup('editTask', task.id)}
                                 key={task.id}
-                                className={`w-[259px] p-8 cursor-pointer rounded-xl ${
-                                    activeTaskId === task.id ? 'bg-slate-200' : 'bg-slate-100'
-                                }`}
+                                className={`w-[259px] p-8 cursor-pointer rounded-xl ${activeTaskId === task.id ? 'bg-slate-200' : 'bg-slate-100'
+                                    }`}
                             >
                                 <div>
                                     <div className="py-1 px-4 rounded-xl border text-black bg-ligher-green border-gray-50 text-xs w-fit">
@@ -96,7 +95,7 @@ export default function DisplayTasks() {
                                     <p className="opacity-50">{task.description}</p>
                                 </div>
 
-                                {activeTaskId === task.id && (
+                                {/* {activeTaskId === task.id && (
                                     <div className="absolute bottom-[40px] right-[20px]">
                                         <div className="flex">
                                             <button
@@ -113,7 +112,7 @@ export default function DisplayTasks() {
                                             </button>
                                         </div>
                                     </div>
-                                )}
+                                )} */}
                             </div>
                         ))}
                     </div>
