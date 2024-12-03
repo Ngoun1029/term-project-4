@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon|null $deadline
  * @property int $emergent_level
  * @property string|null $progress
+ * @property string|null $assign_user_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
@@ -39,6 +40,7 @@ class Task extends Model
         'deadline',
         'emergent_level',
         'progress',
+        'assign_user_id',
         'created_at',
         'updated_at',
     ];

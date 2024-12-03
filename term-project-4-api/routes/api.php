@@ -3,6 +3,7 @@
 use App\Http\Controllers\CodeController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\User\HistoryController;
 use App\Http\Controllers\User\NotificationController;
 use App\Http\Controllers\User\SettingController;
 use App\Http\Controllers\User\TaskController;
@@ -50,7 +51,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/task-view-detail/{id}', [TaskController::class, 'show']);
     Route::delete('/task-remove/{id}', [TaskController::class, 'destroy']);
 
-
+    //history
+    Route::post('/history-view/data', [HistoryController::class, 'view']);
+    Route::get('/history-detail/{id}', [HistoryController::class, 'show']);
+    
     //notification
     // Route::post('/notification-create', [NotificationController::class, 'store']);
     Route::post('/notification-view/data', [NotificationController::class, 'view']);

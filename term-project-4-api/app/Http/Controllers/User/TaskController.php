@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\MasterController;
+use App\Models\History;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\UserDetail;
@@ -81,6 +82,7 @@ class TaskController extends Controller
                 $tasks->deadline = $request->deadline;
                 $tasks->emergent_level = $request->emergent_level;
                 $tasks->progress = 'pending';
+                $tasks->assign_user_id = 0;
                 $tasks->created_at = Carbon::now();
                 $tasks->updated_at = Carbon::now();
                 $tasks->save();
@@ -152,17 +154,43 @@ class TaskController extends Controller
                     $user_detail->profile_picture = $this->masterController->appendBaseUrl($user_detail->profile_picture, 'user-profile');
                     return $user_detail;
                 });
-                $tranFormCollection = $tasks->getCollection()->transform(function ($task) use ($tasks, $user_details, $users) {
+                $userAssignId = $tasks->pluck('assign_user_id');
+                $users_assigns = User::whereIn('id', $userAssignId)->get()->keyBy('id');
+                $usersAssignId = $users_assigns->pluck('id');
+                $user_detail_assigns = UserDetail::whereIn('user_id', $usersAssignId)->get()->keyBy('user_id');
+                $user_detail_assigns = $user_detail_assigns->map(function($user_detail_assign){
+                    $user_detail_assign->profile_picture = $this->masterController->appendBaseUrl($user_detail_assign->profile_picture, 'user-profile');
+                    return $user_detail_assign;
+                });
+
+                $tranFormCollection = $tasks->getCollection()->transform(function ($task) use ($tasks, $user_details, $users, $users_assigns, $user_detail_assigns) {
+                    // Retrieve user and their details
                     $user = $users->get($task->user_id) ?? null;
-                    $user_detail = $user_details->get($user->id) ?? null;
+                    $user_detail = $user ? $user_details->get($user->id) : null;
+
+                    // Retrieve assigned user and their details
+                    $user_assign = $users_assigns->get($task->assign_user_id) ?? null;
+                    $user_detail_assign = $user_assign ? $user_detail_assigns->get($user_assign->id) : null;
+
+                    // Only modify task if it exists
                     if ($task !== null) {
                         $task['users'] = $user;
-                        $user['user_details'] = $user_detail;
+                        $task['user_assign'] = $user_assign;
+
+                        // Add user details if they exist
+                        if ($user) {
+                            $user['user_details'] = $user_detail;
+                        }
+                        if ($user_assign) {
+                            $user_assign['user_detail_assign'] = $user_detail_assign;
+                        }
                     } else {
                         $task = null;
                     }
+
                     return $task;
                 });
+
                 $tasks->setCollection($tranFormCollection);
                 return response()->json([
                     'verified' => true,
@@ -202,26 +230,66 @@ class TaskController extends Controller
                 ]);
             }
 
-            if(Auth::user()->tokenCan('user:task-view-detail')){
+            if (Auth::user()->tokenCan('user:task-view-detail')) {
+                // Fetch the task by ID
                 $tasks = Task::where('id', $id)->first();
+
+                // Check if the task exists
+                if (!$tasks) {
+                    return response()->json([
+                        'verified' => false,
+                        'status' => 'error',
+                        'message' => 'Task not found',
+                    ], 404);
+                }
+
+                // Get the assigned user ID from the task
+                $userAssignId = $tasks->assign_user_id;
+
+                // Fetch the assigned user(s)
+                $user_assigns = User::where('id', $userAssignId)->get()->keyBy('id');
+                $userDetailAssignId = $user_assigns->pluck('id');
+
+                // Fetch user details
+                $user_detail_assigns = UserDetail::whereIn('user_id', $userDetailAssignId)->get()->keyBy('user_id');
+
+                // Fetch specific user assign and details
+                $user_assign = $user_assigns->get($userAssignId) ?? null;
+                $user_detail_assign = $user_assign ? $user_detail_assigns->get($user_assign->id) : null;
+
+                // Modify user detail assign if it exists
+                if ($user_detail_assign) {
+                    $user_detail_assign->profile_picture = $this->masterController->appendBaseUrl(
+                        $user_detail_assign->profile_picture,
+                        'user-profile'
+                    );
+                }
+
+                // Add user assign details to the task
+                $tasks['user_assign'] = $user_assign;
+                if ($user_assign) {
+                    $user_assign['user_detail_assign'] = $user_detail_assign;
+                }
+
+                // Return the response
                 return response()->json([
                     'verified' => true,
                     'status' => 'success',
                     'message' => 'found',
                     'data' => [
                         'result' => $tasks,
-                    ]
-                ],200);
-            }
-            else {
+                    ],
+                ], 200);
+            } else {
+                // User does not have permission
                 return response()->json([
                     'verified' => false,
-                    'status ' => 'error',
+                    'status' => 'error',
                     'message' => 'no accessible',
                 ], 403);
             }
-
         }
+
         catch (Exception $e) {
             return response()->json([
                 'verified' => false,
@@ -230,6 +298,7 @@ class TaskController extends Controller
             ], 500);
         }
     }
+
 
 
     /**
@@ -253,7 +322,8 @@ class TaskController extends Controller
                 'description' => 'nullable|string',
                 'deadline' => 'nullable|string',
                 'emergent_level' => 'nullable|numeric',
-                'progress' => 'nullable|string'
+                'progress' => 'nullable|string',
+                'email' => 'nullable|string',
             ]);
 
             if ($validator->fails()) {
@@ -274,13 +344,22 @@ class TaskController extends Controller
                         'message' => 'forbidden',
                     ]);
                 }
-
+                $usersAssignToTask = User::where('email', $request->email)->first();
+                if(!$usersAssignToTask){
+                    return response()->json([
+                        'verified' => false,
+                        'status' => 'error',
+                        'message' => 'not found'
+                    ], 404);
+                }
+                $userId = $usersAssignToTask->id;
                 $tasks->categories = empty($request->categories) || null ? $tasks->categories : $request->categories;
                 $tasks->title = empty($request->title) || null ? $tasks->title : $request->title;
                 $tasks->description = empty($request->description) || null ? $tasks->description : $request->description;
                 $tasks->deadline = empty($request->deadline) || null ? $tasks->deadline : $request->deadline;
                 $tasks->emergent_level = empty($request->emergent_level) || null ? $tasks->emergent_level : $request->emergent_level;
                 $tasks->progress = empty($request->progress) || null ? $tasks->progress : $request->progress;
+                $tasks->assign_user_id = empty($request->email) || null ? $userId : 0;
                 $tasks->updated_at = Carbon::now();
                 $tasks->save();
 
@@ -339,6 +418,28 @@ class TaskController extends Controller
                     ], 401);
                 }
                 $tasks = Task::where('id', $id)->first();
+                if(!$tasks){
+                    return response()->json([
+                        'verified' => false,
+                        'status' => 'error',
+                        'message' => 'not found'
+                    ], 404);
+                }
+
+                //history record before delete
+                $historys = new History();
+                $historys->user_id = Auth::user()->id;
+                $historys->categories = $tasks->categories;
+                $historys->title = $tasks->title;
+                $historys->description = $tasks->description;
+                $historys->deadline = $tasks->deadline;
+                $historys->emergent_level = $tasks->emergent_level;
+                $historys->progress = $tasks->progress;
+                $historys->assign_user_id = $tasks->assign_user_id;
+                $historys->created_at = Carbon::now();
+                $historys->updated_at = Carbon::now();
+                $historys->save();
+
                 $tasks->delete();
 
                 return response()->json([

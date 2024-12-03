@@ -171,17 +171,7 @@ class NotificationController extends Controller
                 ]);
             }
 
-            // $validator = Validator::make($request->all(), [
-            //     'notification_id' => 'required|numeric',
-            // ]);
-
-            // if($validator->fails()){
-            //     return response()->json([
-            //         'verified' => false,
-            //         'status' => 'error',
-            //         'message' => $validator->errors(),
-            //     ], 400);
-            // }
+          
 
             if(Auth::user()->tokenCan('user:notification-read')){
                 $read = Notification::where('id', $id)->first();

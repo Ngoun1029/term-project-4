@@ -149,6 +149,10 @@ class LoginController extends Controller
                         'user:task-edit',
                         'user:task-view-detail',
 
+                        //history
+                        'user:history-view',
+                        'user:history-view-detail',
+
                         //notification
                         'user:notification-view',
                         'user:notification-read',
@@ -258,6 +262,10 @@ class LoginController extends Controller
                         'user:notification-view',
                         'user:notification-read',
                         'user:notification-remove',
+
+                        //history
+                        'user:history-view',
+                        'user:history-view-detail',
 
                        //setting
                        'user:email-change',
