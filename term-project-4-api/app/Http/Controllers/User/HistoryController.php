@@ -191,32 +191,6 @@ class HistoryController extends Controller
             }
 
 
-            // if(Auth::user()->tokenCan('user:history-view-detail')){
-            //     $historys = History::where('id', $id)->first();
-            //     $userAssignId = $historys->assign_user_id;
-            //     $user_assigns = User::whereIn('id', $userAssignId)->get()->keyBy('id');
-            //     $userDetailAssignId = $user_assigns->pluck('id');
-            //     $user_detail_assigns = UserDetail::whereIn('user_id', $userDetailAssignId)->get()->keyBy('user_id');
-            //     $user_assign = $user_assigns->get($historys->assign_user_id) ?? null;
-            //     $user_detail_assign = $user_detail_assigns->get($user_assigns->id) ?? null;
-
-            //     if($historys !== null){
-            //         $historys['user_assigns'] = $user_assign;
-            //         $user_assign['user_detail_assigns'] = $user_detail_assign;
-            //     }
-            //     else{
-            //         $historys = null;
-            //     }
-
-            //     return response()->json([
-            //         'verified' => true,
-            //         'status' => 'success',
-            //         'message' => 'foung',
-            //         'data' => [
-            //             'result' => $historys,
-            //         ]
-            //     ], 200);
-            // }
             else{
                 return response()->json([
                     'verified' => false,

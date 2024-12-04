@@ -182,13 +182,15 @@ export const userEdit = async (UserUpdateParam, token) => {
     }
 }
 
-//task
+//task assigner
 export const taskData = async (TaskDataParam, token) => {
     const param = TaskDataParam;
     try {
         const response = await url.post('/api/task-view/data', {
             page: param.page,
             range: param.range,
+            progress: param.progress,
+            emergent_level: param.emergent_level,
         }, {
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -274,6 +276,88 @@ export const taskDetail = async (taskId, token) => {
 export const taskDelete = async (taskId, token) => {
     try {
         const response = await url.delete(`/api/task-remove/${taskId}`, {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "X-CSRF-TOKEN": "",
+                "Content-Type": "application/json",
+            },
+        });
+        return response.data;
+    }
+    catch (error) {
+        console.log('errror message:', error);
+    }
+}
+
+//task assigned
+
+export const taskAssignedData = async(TaskAssignedDataParam, token)=>{
+    const param = TaskAssignedDataParam;
+    try{
+        const response = await url.post('/api/task-assigned-view/data', {
+            page : param.page,
+            range : param.range,
+        },{
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "X-CSRF-TOKEN": "",
+                "Content-Type": "application/json",
+            },
+        });
+        return response.data;
+    }
+    catch (error) {
+        console.log('errror message:', error);
+    }
+}
+
+export const taskUpdateProgress = async(TaskProgressUpdateParam, token)=>{
+    const param = TaskProgressUpdateParam;
+    try{
+        const response = await url.post('/api/task-update-progrss',{
+            taskId : param.taskId,
+            progress: param.progress,
+        },{
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "X-CSRF-TOKEN": "",
+                "Content-Type": "application/json",
+            },
+        });
+        return response.data;
+    }
+    catch(error){
+        console.log('errror message:', error);
+    }
+}
+
+//history 
+
+export const historyDetail = async(historyId, token)=>{
+    try{
+        const response = await url.get(`/api/history-detail/${historyId}`,{
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "X-CSRF-TOKEN": "",
+                "Content-Type": "application/json",
+            },
+
+        });
+
+        return response.data;
+    }
+    catch(error){
+        console.log('error message:', error); 
+    }
+}
+
+export const historyData = async(HistoryDataParam, token)=>{
+    const param = HistoryDataParam;
+    try{
+        const response = await url.post('/api/history-view/data', {
+            page : param.page,
+            range : param.range,
+        },{
             headers: {
                 "Authorization": `Bearer ${token}`,
                 "X-CSRF-TOKEN": "",

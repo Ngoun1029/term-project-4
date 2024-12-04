@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Task;
 use App\Models\User;
 use App\Models\UserDetail;
 use Carbon\Carbon;
@@ -149,6 +150,9 @@ class LoginController extends Controller
                         'user:task-edit',
                         'user:task-view-detail',
 
+                        'user:task-assign-view',
+                        'user:task-update',
+
                         //history
                         'user:history-view',
                         'user:history-view-detail',
@@ -244,6 +248,9 @@ class LoginController extends Controller
                 } else {
                     $users = null;
                 }
+
+
+
                 $signInData = [
                     'user' => $users,
                     'token' => $users->createToken('authToken', [
@@ -258,6 +265,9 @@ class LoginController extends Controller
                         'user:task-edit',
                         'user:task-view-detail',
 
+                        'user:task-assign-view',
+                        'user:task-update',
+
                         //notification
                         'user:notification-view',
                         'user:notification-read',
@@ -267,10 +277,10 @@ class LoginController extends Controller
                         'user:history-view',
                         'user:history-view-detail',
 
-                       //setting
-                       'user:email-change',
-                       'user:password-change',
-                       'user:information-edit',
+                        //setting
+                        'user:email-change',
+                        'user:password-change',
+                        'user:information-edit',
 
                     ])->plainTextToken
                 ];

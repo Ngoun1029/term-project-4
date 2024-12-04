@@ -171,8 +171,6 @@ class NotificationController extends Controller
                 ]);
             }
 
-          
-
             if(Auth::user()->tokenCan('user:notification-read')){
                 $read = Notification::where('id', $id)->first();
                 if(!$read){

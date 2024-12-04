@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 
 /**
- * Class Task
+ * Class Notification
  *
  * @property int $id
  * @property int $user_id

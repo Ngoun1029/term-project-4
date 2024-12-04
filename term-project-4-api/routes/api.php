@@ -51,10 +51,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/task-view-detail/{id}', [TaskController::class, 'show']);
     Route::delete('/task-remove/{id}', [TaskController::class, 'destroy']);
 
+    //user assigner
+    Route::post('/task-assigned-view/data',[TaskController::class, 'viewAssignTask']);
+    Route::post('/task-update-progrss', [TaskController::class,'update']);
+    
     //history
     Route::post('/history-view/data', [HistoryController::class, 'view']);
     Route::get('/history-detail/{id}', [HistoryController::class, 'show']);
-    
+
     //notification
     // Route::post('/notification-create', [NotificationController::class, 'store']);
     Route::post('/notification-view/data', [NotificationController::class, 'view']);

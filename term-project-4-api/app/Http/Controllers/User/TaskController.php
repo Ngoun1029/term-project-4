@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\MasterController;
 use App\Models\History;
+use App\Models\Invitation;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\UserDetail;
@@ -128,6 +129,8 @@ class TaskController extends Controller
             $validator = Validator::make($request->all(), [
                 'page' => 'required|numeric',
                 'range' => 'required|numeric',
+                'progress' => 'nullable|string',
+                'emergent_level' => 'nullable|numeric',
             ]);
 
             if ($validator->fails()) {
@@ -145,7 +148,16 @@ class TaskController extends Controller
 
 
             if (Auth::user()->tokenCan('user:task-view')) {
-                $tasks = Task::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->paginate($request->range);
+                $query = Task::where('user_id', Auth::user()->id);
+
+                if ($request->has('progress') && !empty($request->progress)) {
+                    $query->where('progress', $request->progress);
+                }
+                if($request->has('emergent_level') && !empty($request->emergent_level)){
+                    $query->where('emergent_level', $request->emergent_level);
+                }
+
+                $tasks = $query->orderBy('created_at', 'desc')->paginate($request->range);
                 $userId = $tasks->pluck('user_id');
                 $users = User::whereIn('id', $userId)->get()->keyBy('id');
                 $userDetailId = $users->pluck('id');
@@ -363,12 +375,23 @@ class TaskController extends Controller
                 $tasks->updated_at = Carbon::now();
                 $tasks->save();
 
+                $invitations = new Invitation();
+                $invitations->inviter_id = Auth::user()->id;
+                $invitations->invited_id = $userId;
+                $invitations->message = $users->user_name.' '.'invite you to do'. ' ' . $tasks->title;
+                $invitations->save();
+
+                $updateTask = [
+                    'task' => $tasks,
+                    'invite' => $invitations,
+                ];
+
                 return response()->json([
                     'verified' => true,
                     'status' => 'success',
                     'message' => 'task have update successfully',
                     'data' => [
-                        'result' => $tasks,
+                        'result' => $updateTask,
                     ]
                 ], 200);
             } else {
@@ -387,12 +410,161 @@ class TaskController extends Controller
         }
     }
 
+    public function viewAssignTask(Request $request){
+        try{
+            if(!Auth::check()){
+                return response()->json([
+                    'verified' => false,
+                    'status' => 'error',
+                    'message' => 'please login'
+                ]);
+            }
+
+            $validator = Validator::make($request->all(), [
+                'page' => 'required|numeric',
+                'range' => 'required|numeric',
+            ]);
+
+            if($validator->fails()){
+                return response()->json([
+                    'verified' => false,
+                    'status' => 'error',
+                    'message' => $validator->errors(),
+                ], 400);
+            }
+
+            $page = $request->get('page', 1);
+            Paginator::currentPageResolver(function () use ($page) {
+                return $page;
+            });
+
+            if(Auth::user()->tokenCan('user:task-assign-view')){
+                $users = Auth::user();
+                $taskAssigns = Task::where('assign_user_id', $users->id)->paginate($request->range);
+                $userAssignerId = $taskAssigns->pluck('user_id');
+                $user_assigners = User::whereIn('id', $userAssignerId)->get()->keyby('id');
+                $userDetailAssignerId = $user_assigners->pluck('id');
+                $user_detail_assigners = UserDetail::whereIn('user_id', $userDetailAssignerId)->get()->keyBy('user_id');
+                $user_detail_assigners = $user_detail_assigners->map(function($user_detail_assigner){
+                    $user_detail_assigner->profile_picture = $this->masterController->appendBaseUrl($user_detail_assigner->profile_picture, 'user-profile');
+                    return $user_detail_assigner;
+                });
+                $transformCollection = $taskAssigns->getCollection()->transform(function ($taskAssign) use ($user_assigners, $user_detail_assigners) {
+                    $user_assigner = $user_assigners->get($taskAssign->user_id) ?? null;
+                    $user_detail_assigner = $user_assigner ? $user_detail_assigners->get($user_assigner->id) : null;
+
+                    if ($taskAssign !== null) {
+                        $taskAssign['user'] = $user_assigner;
+                        if ($user_assigner) {
+                            $user_assigner['user_detail'] = $user_detail_assigner;
+                        }
+                    } else {
+                        $taskAssign = null;
+                    }
+                    return $taskAssign;
+                });
+
+
+                $taskAssigns->setCollection($transformCollection);
+                return response()->json([
+                    'verified' => true,
+                    'status' => 'success',
+                    'message' => 'found',
+                    'data' => [
+                        'result' => $taskAssigns,
+                    ]
+                ], 200 );
+            }
+            else{
+                return response()->json([
+                    'verified' => false,
+                    'status' => 'error',
+                    'message' => 'no accessible',
+                ], 403);
+            }
+        }
+        catch (Exception $e) {
+            return response()->json([
+                'verified' => false,
+                'status' => 'error',
+                'message' => Str::limit($e->getMessage(), 150, '...'),
+            ], 500);
+        }
+    }
+
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        //
+        try{
+
+            if(!Auth::check()){
+                return response()->json([
+                    'verified' => false,
+                    'status' => 'error',
+                    'message' => 'please login'
+                ]);
+            }
+
+            $validator = Validator::make($request->all(), [
+                'taskId' => 'required|string',
+                'progress' => 'required|string',
+
+            ]);
+
+            if($validator->fails()){
+                return response()->json([
+                    'verified' => false,
+                    'status' => 'error',
+                    'message' => $validator->errors(),
+                ], 400);
+            }
+
+            if(Auth::user()->tokenCan('user:task-update')){
+                $users = Auth::user();
+                $tasks = Task::where('id', $request->taskId)->first();
+                if(!$tasks){
+                    return response()->json([
+                        'verified' => false,
+                        'status' => 'error',
+                        'message' => 'not found',
+                    ], 404);
+                }
+                if($tasks->assign_user_id !== $users->id){
+                    return response()->json([
+                        'verified' => false,
+                        'status' => 'error',
+                        'message' => 'not found',
+                    ], 404);
+                }
+                $tasks->progress = empty($request->progress) || null ? $tasks->progress : $request->progress;
+                $tasks->updated_at = Carbon::now();
+                $tasks->save();
+                return response()->json([
+                    'verified' => true,
+                    'status' => 'success',
+                    'message' => 'save',
+                    'data' => [
+                        'result' => $tasks,
+                    ]
+                ], 200);
+            }
+            else{
+                return response()->json([
+                    'verified' => false,
+                    'status' => 'error',
+                    'message' =>'no accessible',
+                ], 403);
+            }
+
+        }catch (Exception $e) {
+            return response()->json([
+                'verified' => false,
+                'status' => 'error',
+                'message' => Str::limit($e->getMessage(), 150, '...'),
+            ], 500);
+        }
     }
 
     /**
@@ -426,19 +598,18 @@ class TaskController extends Controller
                     ], 404);
                 }
 
-                //history record before delete
-                $historys = new History();
-                $historys->user_id = Auth::user()->id;
-                $historys->categories = $tasks->categories;
-                $historys->title = $tasks->title;
-                $historys->description = $tasks->description;
-                $historys->deadline = $tasks->deadline;
-                $historys->emergent_level = $tasks->emergent_level;
-                $historys->progress = $tasks->progress;
-                $historys->assign_user_id = $tasks->assign_user_id;
-                $historys->created_at = Carbon::now();
-                $historys->updated_at = Carbon::now();
-                $historys->save();
+                $history = new History();
+                $history->user_id = $tasks->assign_user_id;
+                $history->categories = $tasks->categories;
+                $history->title = $tasks->title;
+                $history->description = $tasks->description;
+                $history->deadline = $tasks->deadline;
+                $history->emergent_level = $tasks->emergent_level;
+                $history->progress = $tasks->progress;
+                $history->assign_user_id = $tasks->assign_user_id;
+                $history->created_at = Carbon::now();
+                $history->updated_at = Carbon::now();
+                $history->save();
 
                 $tasks->delete();
 
