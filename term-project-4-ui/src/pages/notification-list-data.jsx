@@ -24,16 +24,20 @@ const TaskNotifications = ({ userId, token }) => {
 
     fetchNotifications();
 
-    // Set up real-time listener for notifications using Laravel Echo
-    const channel = echo.channel(`user.${userId}`);
-    channel.listen('TaskDeadlineNotification', (event) => {
+    const channel = echo.private(`user.${userId}`);
+
+    // Listen for the TaskNotification event
+    channel.listen('.TaskNotification', (event) => {
+      // console.log('Notification received:', event);
+      //fetch with notification api
+
       // Add the new notification to the state
-      setNotifications(prevNotifications => [event, ...prevNotifications]);
+      setNotifications((prevNotifications) => [event, ...prevNotifications]);
     });
 
     // Cleanup listener on component unmount
     return () => {
-      channel.stopListening('TaskDeadlineNotification');
+      channel.stopListening('.TaskNotification');
     };
   }, [userId, token]);  // Re-fetch data when userId or token changes
 

@@ -7,6 +7,11 @@ const echo = new Echo({
   key: process.env.REACT_APP_PUSHER_APP_KEY, // Store Pusher key in .env file or use hardcoded values
   cluster: process.env.REACT_APP_PUSHER_APP_CLUSTER,
   forceTLS: true,
+  auth: {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`, // Assuming you store the token in localStorage
+    },
+  },
 });
 
 export default echo;
