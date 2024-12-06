@@ -71,14 +71,14 @@ export default function DisplayTasks() {
     }, []);
 
     return (
-        <div className="mt-8 h-[700px] overflow-y-auto">
+        <div className=" h-[700px] overflow-y-auto">
             {loading ? (
-                <p className="mt-20">Loading...</p>
+                <p className="mt-40">Loading...</p>
             ) : tasks.length === 0 ? (
-                <p className="mt-20">No tasks available.</p>
+                <p className="mt-40">No tasks available.</p>
             ) : (
                 <>
-                    <div className="flex flex-wrap gap-4 mt-20">
+                    <div className="flex flex-wrap gap-4 mt-40">
                         {tasks.map((task) => (
                             <div
                                 onClick={() => showPopup('editTask', task.id)}
@@ -91,28 +91,9 @@ export default function DisplayTasks() {
                                         {task.categories}
                                     </div>
                                     <h1 className="text-xl font-medium mb-4">{task.title}</h1>
-                                    <p className="opacity-75 mb-2">Deadline: {formatDate(task.deadline)}</p>
-                                    <p className="opacity-50">{task.description}</p>
+                                    <p className="mb-2">Deadline: {formatDate(task.deadline)}</p>
+                                    <p>{task.description}</p>
                                 </div>
-
-                                {/* {activeTaskId === task.id && (
-                                    <div className="absolute bottom-[40px] right-[20px]">
-                                        <div className="flex">
-                                            <button
-                                                onClick={() => showPopup('editTask', task.id)}
-                                                className="py-2 px-8 bg-lighter-blue text-black hover:bg-blue-hover rounded-lg me-2"
-                                            >
-                                                Edit
-                                            </button>
-                                            <button
-                                                onClick={() => showPopup('deleteTask', task.id)}
-                                                className="py-2 px-8 bg-main-bg text-white hover:text-[#ddd] rounded-lg"
-                                            >
-                                                Delete
-                                            </button>
-                                        </div>
-                                    </div>
-                                )} */}
                             </div>
                         ))}
                     </div>

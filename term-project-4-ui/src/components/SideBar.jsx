@@ -31,7 +31,7 @@ export default function SideBar() {
     }
 
     return (
-        <div className='bg-main-bg fixed py-8 px-6 h-full rounded-3xl w-auto'>
+        <div className='bg-main-bg ms-4 mt-8 fixed py-8 px-4 rounded-3xl w-auto'>
             <div className='flex flex-col gap-5'>
 
                 <div 

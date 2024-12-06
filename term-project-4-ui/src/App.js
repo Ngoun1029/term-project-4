@@ -24,7 +24,6 @@ function App() {
         <Route path='/email-verify' element={<EmailVerify/>} />
         <Route path='/email-verify-code' element={<EmailVerifyCode/>}/>
         <Route path='/notification' element={<TaskNotifications/>}/>
-        
       </Routes>
       <CreateNewTask/>
       <EditTask/>
