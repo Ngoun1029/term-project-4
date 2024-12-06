@@ -163,24 +163,49 @@ export const userProfile = async (token) => {
 
 
 export const userEdit = async (UserUpdateParam, token) => {
-    const param = UserUpdateParam;
+    const formData = new FormData();
+    formData.append('user_name', UserUpdateParam.user_name);
+
+    // Check if there's a profile picture and append it
+    if (UserUpdateParam.profile_picture) {
+        formData.append('profile_picture', UserUpdateParam.profile_picture);
+    }
+
     try {
-        const response = await url.post('/api/user-edit', {
-            user_name: param.user_name,
-            profile_picture: param.profile_picture,
-        }, {
+        const response = await url.post('/api/user-edit', formData, {
             headers: {
                 "Authorization": `Bearer ${token}`,
                 "X-CSRF-TOKEN": "",
-                "Content-Type": "application/json",
+                "Content-Type": "multipart/form-data", // This is important for file uploads
             }
         });
         return response.data;
+    } catch (error) {
+        console.error('Error during user edit:', error);
+        throw error; // Re-throw the error if you need to handle it further upstream
     }
-    catch (error) {
-        console.log('error message:', error);
-    }
-}
+};
+
+
+// export const userEdit = async (UserUpdateParam, token) => {
+//     const param = UserUpdateParam;
+//     try {
+//         const response = await url.post('/api/user-edit', {
+//             user_name: param.user_name,
+//             profile_picture: param.profile_picture,
+//         }, {
+//             headers: {
+//                 "Authorization": `Bearer ${token}`,
+//                 "X-CSRF-TOKEN": "",
+//                 "Content-Type": "application/json",
+//             }
+//         });
+//         return response.data;
+//     }
+//     catch (error) {
+//         console.log('error message:', error);
+//     }
+// }
 
 //task assigner
 export const taskData = async (TaskDataParam, token) => {
