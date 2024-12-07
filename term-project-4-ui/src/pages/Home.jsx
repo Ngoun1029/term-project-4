@@ -4,9 +4,9 @@ import Body from '../components/home/Body'
 
 export default function Home() {
   return (
-    <div>
+    <>
       <SideBar />
       <Body />
-    </div>
+    </>
   )
 }

@@ -4,7 +4,8 @@ import { IoMdTime } from "react-icons/io";
 import { MdOutlineEmergencyShare, MdOpenInNew } from "react-icons/md";
 import { LuPencilLine } from "react-icons/lu";
 import { usePopup } from "../context/PopupContext";
-import { taskDetail, taskUpdate } from "../../server/api";
+import { taskDelete, taskDetail, taskUpdate } from "../../server/api";
+import { MdOutlineAttachEmail } from "react-icons/md";
 
 export default function EditTask() {
   const [categories, setCategory] = useState("loading..");
@@ -13,6 +14,7 @@ export default function EditTask() {
   const [deadline, setDeadline] = useState("loading..");
   const [emergent_level, setEmergentLevel] = useState("loading..");
   const [progress, setProgress] = useState("");
+  const [email, setEmail] = useState("");
   const [task, setTask] = useState('');
 
   const [loading, setLoading] = useState(false);
@@ -47,13 +49,13 @@ export default function EditTask() {
 
   const fetchTaskDetails = async () => {
     try {
-      // const response = await taskDetail({ task_id: currentTaskId }, token);
+
       const response = await taskDetail(currentTaskId, token);
       const task = response?.data?.result;
 
       setTask(task);
       console.log('task popup', task);
-      
+
       if (task) {
         setCategory(task.categories || "");
         setTitle(task.title || "");
@@ -61,6 +63,7 @@ export default function EditTask() {
         setDeadline(task.deadline ? new Date(task.deadline).toISOString().split("T")[0] : "");
         setEmergentLevel(task.emergent_level || "");
         setProgress(task.progress || "");
+        setEmail(task.email || null);
       }
     } catch (error) {
       console.error("Error fetching task details: ", error);
@@ -75,9 +78,10 @@ export default function EditTask() {
     setDeadline("Loading...");
     setEmergentLevel("Loading...");
     setProgress("");
+    setEmail("");
   };
 
-  const handleSubmit = async (e) => {
+  const handleEditTask = async (e) => {
     e.preventDefault();
     setLoading(true);
 
@@ -89,7 +93,8 @@ export default function EditTask() {
         description,
         deadline: deadline ? new Date(deadline).toISOString() : "",
         emergent_level,
-        progress,
+        // progress,
+        email
       };
 
       // Validate fields
@@ -112,11 +117,31 @@ export default function EditTask() {
     return null;
   }
 
+  //delete task 
+  const handleDeleteTask = async (e) => {
+
+    e.preventDefault();
+
+    setLoading(true);
+
+    try {
+      const response = await taskDelete(currentTaskId, token);
+
+      if (response) {
+        console.log("Task updated successfully:", response);
+        hidePopup();
+      }
+    } catch (error) {
+      console.error("Error deleting task", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <form
         ref={contentRef}
-        onSubmit={handleSubmit}
         className="p-8 bg-gray-50 w-[500px] rounded-xl"
       >
         <h1 className="text-xl">Task Details: {task.title}</h1>
@@ -211,21 +236,42 @@ export default function EditTask() {
               </select>
             </div>
           </div>
+          <div className="mb-3 flex items-center justify-between">
+            <div className="flex items-center opacity-75">
+              <MdOutlineEmergencyShare />
+              <span className="ms-3">Progress</span>
+            </div>
+            <div>
+              <select
+                id="progress"
+                value={progress}
+                placeholder={task.progress}
+                onChange={(e) => setProgress(e.target.value)}
+                className="border border-slate-200 rounded-xl py-2 px-8 w-full"
+              >
+                <option value="" disabled>
+                  progress
+                </option>
+                <option value="pending">Pending</option>
+                <option value="finish">Finish</option>
+              </select>
+            </div>
+          </div>
+          <div className="mb-3 flex items-center justify-between">
+            <div className="flex items-center opacity-75">
+              <MdOutlineAttachEmail />
+              <span className="ms-3">User Email</span>
+            </div>
+            <div>
+              <input
+                type="email"
+                id="email"
+                onChange={(e) => setEmail(e.target.value)}
+                className="border border-slate-200 rounded-xl py-2 px-8"
+              />
+            </div>
+          </div>
         </div>
-        {/* <div className="flex justify-end">
-          <button
-            onClick={hidePopup}
-            className="bg-lighter-blue text-black hover:bg-blue-hover py-2 px-8 rounded-lg"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            className="ms-3 bg-black text-white hover:text-[#ddd] py-2 px-8 rounded-lg"
-          >
-             {loading ? 'Saving..' : 'Save'}
-          </button>
-        </div> */}
         <div className="flex justify-end">
           <button
             onClick={hidePopup}
@@ -234,12 +280,15 @@ export default function EditTask() {
             Cancel
           </button>
           <button
+            type="button"
+            onClick={handleDeleteTask}
             className="bg-lighter-blue mx-3 text-black hover:bg-blue-hover py-2 px-8 rounded-lg"
           >
             {loading ? 'Delete..' : 'Delete'}
           </button>
           <button
-            type="submit"
+            type="button"
+            onClick={handleEditTask}
             className=" bg-black text-white hover:text-[#ddd] py-2 px-8 rounded-lg"
           >
             {loading ? 'Editing..' : 'Edit'}

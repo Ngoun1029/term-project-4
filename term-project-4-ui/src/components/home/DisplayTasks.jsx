@@ -25,6 +25,8 @@ export default function DisplayTasks() {
                 const data = await taskData(TaskDataParam, token);
                 if (data && data.status === 'success' && data.data?.result) {
                     const result = data.data.result;
+                    console.log(result);
+                    
                     setTasks(result.data || []);
                     setCurrentPage(result.current_page);
                     setTotalPages(Math.ceil(result.total / result.per_page));
@@ -88,10 +90,10 @@ export default function DisplayTasks() {
                             >
                                 <div>
                                     <div className="py-1 px-4 rounded-xl border text-black bg-ligher-green border-gray-50 text-xs w-fit">
-                                        {task.categories}
+                                        {task.progress}
                                     </div>
                                     <h1 className="text-xl font-medium mb-4">{task.title}</h1>
-                                    <p className="mb-2">Deadline: {formatDate(task.deadline)}</p>
+                                    <p className="mb-2 text-md">Deadline: {formatDate(task.deadline)}</p>
                                     <p>{task.description}</p>
                                 </div>
                             </div>

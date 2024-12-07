@@ -7,11 +7,11 @@ import Home from './pages/Home';
 import CreateNewTask from './components/actions/CreateNewTask';
 import { PopupProvider } from './components/context/PopupContext';
 import EditTask from './components/actions/EditTask';
-import DeleteTask from './components/actions/DeleteTask';
 import Profile from './pages/Profile';
 import EmailVerify from './pages/login-pages/EmailVerify';
 import EmailVerifyCode from './pages/login-pages/EmailVerifyCode';
 import TaskNotifications from './pages/notification-list-data';
+import History from './pages/History';
 
 function App() {
   return (
@@ -24,10 +24,10 @@ function App() {
         <Route path='/email-verify' element={<EmailVerify/>} />
         <Route path='/email-verify-code' element={<EmailVerifyCode/>}/>
         <Route path='/notification' element={<TaskNotifications/>}/>
+        <Route path='/history' element={<History/>}/>
       </Routes>
       <CreateNewTask/>
       <EditTask/>
-      <DeleteTask/>
     </PopupProvider>
   );
 }

@@ -53,7 +53,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     //user assigner
     Route::post('/task-assigned-view/data',[TaskController::class, 'viewAssignTask']);
-    Route::post('/task-update-progrss', [TaskController::class,'update']);
+    Route::post('/task-update-progrss', [TaskController::class,'update']); 
     
     //history
     Route::post('/history-view/data', [HistoryController::class, 'view']);

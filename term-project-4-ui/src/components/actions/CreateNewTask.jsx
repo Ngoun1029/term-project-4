@@ -91,7 +91,7 @@ export default function CreateNewTask() {
         ref={contentRef}
         className="p-8 bg-gray-50 w-[500px] rounded-xl"
       >
-        <h1 className="text-xl">Create New Task</h1>
+        <h1 className="text-xl">Assign New Task</h1>
         <div className="my-8">
           <div className="mb-3 flex items-center justify-between">
             <div className="flex items-center opacity-75">
@@ -101,8 +101,8 @@ export default function CreateNewTask() {
             <div>
               <select
                 id="categories"
-                value={categories} 
-                onChange={(e) => setCategory(e.target.value)} 
+                value={categories}
+                onChange={(e) => setCategory(e.target.value)}
                 className="border border-slate-200 rounded-xl py-2 px-8 w-full"
               >
                 <option value="" disabled>

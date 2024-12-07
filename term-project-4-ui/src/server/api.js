@@ -224,8 +224,6 @@ export const taskData = async (TaskDataParam, token) => {
             }
         });
 
-        // console.log(response.data.result.data);
-
         return response.data;
     }
     catch (error) {
@@ -266,7 +264,8 @@ export const taskUpdate = async (TaskUpdateParam, token) => {
             description: param.description,
             deadline: param.deadline,
             emergent_level: param.emergent_level,
-            progress: param.progress
+            progress: param.progress,
+            email: param.email
 
         }, {
             headers: {
@@ -357,7 +356,6 @@ export const taskUpdateProgress = async(TaskProgressUpdateParam, token)=>{
 }
 
 //history 
-
 export const historyDetail = async(historyId, token)=>{
     try{
         const response = await url.get(`/api/history-detail/${historyId}`,{
@@ -445,7 +443,7 @@ export const notificationDelete = async (notificationId, token) => {
         return response.data;
     }
     catch (error) {
-        console.log('error message:', error);
+        console.log('error message:', error); 
     }
 }
 

@@ -11,7 +11,7 @@ export default function SideBar() {
 
     const { showPopup } = usePopup();
 
-    const nvaigate = useNavigate();
+    const navigate = useNavigate();
     // State to track which link is active
     const [activeLink, setActiveLink] = useState(1); 
 
@@ -21,12 +21,12 @@ export default function SideBar() {
         //if plus icon is clicked, display popup createNewTask
         if (id === 2) { 
             showPopup('createTask');
-        }
-        if(id === 1){
-            nvaigate('/home');
-        }
-        if(id === 3){
-            
+        } else if(id === 1){
+            navigate('/home');
+        } else if(id === 3){
+            navigate('/history');
+        } else if(id === 4) {
+            navigate('/profile')
         }
     }
 
@@ -60,14 +60,6 @@ export default function SideBar() {
                     onClick={() => handleActiveLink(4)} 
                     className={`text-xl p-4 rounded-full cursor-pointer 
                     ${activeLink === 4 ? 'bg-lighter-blue text-black' : 'text-white hover:bg-lighter-blue hover:text-black'}`}
-                >
-                    <FiTrash />
-                </div>
-
-                <div 
-                    onClick={() => handleActiveLink(5)} 
-                    className={`text-xl p-4 rounded-full cursor-pointer 
-                    ${activeLink === 5 ? 'bg-lighter-blue text-black' : 'text-white hover:bg-lighter-blue hover:text-black'}`}
                 >
                     <IoSettingsOutline />
                 </div>
