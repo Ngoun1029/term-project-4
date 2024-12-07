@@ -63,7 +63,7 @@ export default function EditTask() {
         setDeadline(task.deadline ? new Date(task.deadline).toISOString().split("T")[0] : "");
         setEmergentLevel(task.emergent_level || "");
         setProgress(task.progress || "");
-        setEmail(task.email || null);
+        setEmail(task.email || "");
       }
     } catch (error) {
       console.error("Error fetching task details: ", error);
@@ -93,7 +93,7 @@ export default function EditTask() {
         description,
         deadline: deadline ? new Date(deadline).toISOString() : "",
         emergent_level,
-        // progress,
+        progress,
         email
       };
 

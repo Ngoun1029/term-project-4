@@ -356,42 +356,51 @@ class TaskController extends Controller
                         'message' => 'forbidden',
                     ]);
                 }
-                $usersAssignToTask = User::where('email', $request->email)->first();
-                if(!$usersAssignToTask){
-                    return response()->json([
-                        'verified' => false,
-                        'status' => 'error',
-                        'message' => 'not found'
-                    ], 404);
+                // $usersAssignToTask = User::where('email', $request->email)->first();
+                // if(!$usersAssignToTask){
+                //     return response()->json([
+                //         'verified' => false,
+                //         'status' => 'error',
+                //         'message' => 'not found'
+                //     ], 404);
+                // }
+                // $userId = $usersAssignToTask->id;
+                $assignUserId = 0; // Default to 0 when email is empty
+                if (!empty($request->email)) {
+                    $usersAssignToTask = User::where('email', $request->email)->first();
+                    if (!$usersAssignToTask) {
+                        return response()->json([
+                            'verified' => false,
+                            'status' => 'error',
+                            'message' => 'User with the provided email not found',
+                        ], 404);
+                    }
+                    $assignUserId = $usersAssignToTask->id;
                 }
-                $userId = $usersAssignToTask->id;
                 $tasks->categories = empty($request->categories) || null ? $tasks->categories : $request->categories;
                 $tasks->title = empty($request->title) || null ? $tasks->title : $request->title;
                 $tasks->description = empty($request->description) || null ? $tasks->description : $request->description;
                 $tasks->deadline = empty($request->deadline) || null ? $tasks->deadline : $request->deadline;
                 $tasks->emergent_level = empty($request->emergent_level) || null ? $tasks->emergent_level : $request->emergent_level;
                 $tasks->progress = empty($request->progress) || null ? $tasks->progress : $request->progress;
-                $tasks->assign_user_id = empty($request->email) || null ? $userId : 0;
+                $tasks->assign_user_id = $assignUserId;
+
                 $tasks->updated_at = Carbon::now();
                 $tasks->save();
 
-                $invitations = new Invitation();
-                $invitations->inviter_id = Auth::user()->id;
-                $invitations->invited_id = $userId;
-                $invitations->message = $users->user_name.' '.'invite you to do'. ' ' . $tasks->title;
-                $invitations->save();
+                // $invitations = new Invitation();
+                // $invitations->inviter_id = Auth::user()->id;
+                // $invitations->invited_id = $userId;
+                // $invitations->message = $users->user_name.' '.'invite you to do'. ' ' . $tasks->title;
+                // $invitations->save();
 
-                $updateTask = [
-                    'task' => $tasks,
-                    'invite' => $invitations,
-                ];
 
                 return response()->json([
                     'verified' => true,
                     'status' => 'success',
                     'message' => 'task have update successfully',
                     'data' => [
-                        'result' => $updateTask,
+                        'result' => $tasks,
                     ]
                 ], 200);
             } else {
