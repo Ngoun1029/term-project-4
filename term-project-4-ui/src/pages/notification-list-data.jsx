@@ -1,69 +1,82 @@
 import React, { useState, useEffect } from 'react';
-import echo from '../server/echo';  // Assuming Laravel Echo instance is properly set up
-import { notificationData } from '../server/api';  // Your notification data fetch function
+import echo from '../server/echo'; // Laravel Echo instance
+import { notificationData } from '../server/api'; // API for notifications
+import SideBar from '../components/SideBar';
 
-const TaskNotifications = ({ userId, token }) => {
+const TaskNotifications = () => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [userId, setUserId] = useState(null);
 
-  // Fetch notifications on component mount
+  const token = localStorage.getItem('token');
+
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        // Fetch notification data from backend
-        const response = await notificationData({ page: 1, range: 10 }, token);  // Pass required params
-        setNotifications(response.data);  // Update notifications state
-      } catch (error) {
-        console.error('Error fetching notifications:', error);
-        setError('There was an error fetching notifications.');
+        const response = await notificationData({ page: 1, range: 10 }, token);
+        const fetchedNotifications = response.data.result.data;
+
+        setNotifications(fetchedNotifications);
+
+        if (fetchedNotifications.length > 0) {
+          setUserId(fetchedNotifications[0].user_id);
+        } else {
+          console.warn("No notifications found.");
+        }
+
+        console.log('noti: ', notifications);
+        console.log('userID: ', userId);
+
+      } catch (err) {
+        console.error("Error fetching notifications:", err);
+        setError("There was an error fetching notifications.");
       } finally {
-        setLoading(false);  // Stop loading once data is fetched
+        setLoading(false);
       }
     };
 
     fetchNotifications();
+  }, [token]);
+
+  useEffect(() => {
+    if (!userId) return; 
 
     const channel = echo.private(`user.${userId}`);
 
-    // Listen for the TaskNotification event
     channel.listen('.TaskNotification', (event) => {
-      // console.log('Notification received:', event);
-      //fetch with notification api
-
-      // Add the new notification to the state
       setNotifications((prevNotifications) => [event, ...prevNotifications]);
     });
 
-    // Cleanup listener on component unmount
     return () => {
       channel.stopListening('.TaskNotification');
     };
-  }, [userId, token]);  // Re-fetch data when userId or token changes
-
-  if (loading) {
-    return <div>Loading notifications...</div>;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
-  }
+  }, [userId]);
 
   return (
     <div>
-      <h1>Task Notifications</h1>
-      <ul>
-        {notifications.length > 0 ? (
-          notifications.map((notification, index) => (
-            <li key={index}>
-              <p>{notification.message}</p>
-              <small>{new Date(notification.created_at).toLocaleString()}</small>
-            </li>
-          ))
+      <SideBar />
+      <div className="ms-32">
+        <h1>Task Notifications</h1>
+        {loading ? (
+          <p>Loading notifications...</p>
+        ) : error ? (
+          <p className="text-red-500">{error}</p>
         ) : (
-          <p>No notifications available.</p>
+          <ul>
+            {notifications.length > 0 ? (
+              notifications.map((notification, index) => (
+                <li key={index}>
+                  <p>{notification.message}</p>
+                  <small>{new Date(notification.created_at).toLocaleString()}</small>
+                </li>
+              ))
+            ) : (
+              <p>No notifications available.</p>
+            )}
+          </ul>
         )}
-      </ul>
+      </div>
     </div>
   );
 };

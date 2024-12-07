@@ -1,21 +1,14 @@
 import React, { useState } from 'react'
 import Navbar from '../Navbar'
-import Schedualer from './Schedualer'
 import DisplayTasks from './DisplayTasks';
+import Sort from './Sort';
 
 export default function Body() {
 
-  // toggle leftbar 
-  const [openLeftBar, setOpenLeftBar] = useState(false);
-  const handleToggleLeftBar = () => {
-    setOpenLeftBar(prev => !prev);
-  }
-
   return (
     <div className='ms-36'>
-      <div className={` ${openLeftBar ? 'w-[68%]' : ' w-[85%]'}`}>
-        <Navbar openLeftBar={openLeftBar} handleToggleLeftBar={handleToggleLeftBar} />
-      </div>
+      <Navbar />
+      <Sort/>
       <DisplayTasks />
     </div>
   )

@@ -124,7 +124,7 @@ export default function ProfileSide() {
     };
 
     return (
-      <div className="ms-36">
+      <div className="ms-36 pt-8">
         {/* User Profile */}
         <div className="flex items-center justify-between">
           <div className="flex items-center">
@@ -265,7 +265,7 @@ export default function ProfileSide() {
          <div className="mt-8 flex justify-start">
               <button
                 onClick={handleLogout}
-                className="py-2 px-8 rounded-xl bg-red-600 text-white hover:bg-red-700"
+                className="py-2 px-8 rounded-xl bg-black text-white hover:text-[#ddd]"
               >
                 Logout
               </button>
