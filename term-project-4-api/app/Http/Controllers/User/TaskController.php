@@ -675,7 +675,7 @@ class TaskController extends Controller
                 }
 
                 $history = new History();
-                $history->user_id = $tasks->assign_user_id;
+                $history->user_id = $tasks->user_id;
                 $history->categories = $tasks->categories;
                 $history->title = $tasks->title;
                 $history->description = $tasks->description;

@@ -1,26 +1,40 @@
 import React, { useState, useEffect, useRef } from "react";
 import { usePopup } from "../context/PopupContext";
 import { userProfile } from "../../server/api";
+import { userEdit, UserUpdateParam } from "../../server/api";
 
 export default function UpdatePf() {
     const [username, setUsername] = useState("");
     const [pf, setPf] = useState("");
+    const [file, setFile] = useState(null); // To store the selected file
     const [loading, setLoading] = useState(false);
     const token = localStorage.getItem("token");
 
     const { setActivePopup, activePopup, hidePopup } = usePopup();
 
-    //up pf
-    const handleUpdatePf = (e) => {
+    // Handle profile update
+    const handleUpdatePf = async (e) => {
         e.preventDefault();
-
         setLoading(true);
 
-        const param = {  }
+        try {
+            const params = {
+                user_name: username,
+                profile_picture: file, // File object or null
+            };
 
-    }
+            const response = await userEdit(params, token);
+            console.log("Update successful:", response);
+            setActivePopup(null); // Close the popup after success
+        } catch (error) {
+            console.error("Error updating profile:", error);
+            alert("Failed to update profile. Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
-    //display information 
+    // Display user information
     useEffect(() => {
         const fetchUserData = async () => {
             try {
@@ -31,6 +45,7 @@ export default function UpdatePf() {
                         setUsername(userDetails.user_name || "");
                         setPf(userDetails.profile_picture || "");
                         console.log("Profile Picture:", userDetails.profile_picture);
+                        console.log("data:", data);
                     }
                 }
             } catch (err) {
@@ -55,7 +70,7 @@ export default function UpdatePf() {
         };
     }, [setActivePopup]);
 
-    //set to know which popup to display
+    // Set to know which popup to display
     if (activePopup !== "updatePf") {
         return null;
     }
@@ -79,9 +94,11 @@ export default function UpdatePf() {
                     )}
                     <input
                         type="file"
-                        onChange={(e) =>
-                            setPf(URL.createObjectURL(e.target.files[0]))
-                        }
+                        accept="image/*"
+                        onChange={(e) => {
+                            setFile(e.target.files[0]);
+                            setPf(URL.createObjectURL(e.target.files[0])); // Update preview
+                        }}
                         className="w-full p-3 border rounded-lg"
                     />
                 </div>
@@ -101,14 +118,16 @@ export default function UpdatePf() {
                         type="button"
                         onClick={hidePopup}
                         className="bg-lighter-blue text-black hover:bg-blue-hover py-2 px-8 rounded-lg"
+                        disabled={loading}
                     >
                         Cancel
                     </button>
                     <button
-                        type="button"
+                        type="submit"
                         className="bg-black ms-3 text-white hover:text-[#ddd] py-2 px-8 rounded-lg"
+                        disabled={loading}
                     >
-                        Save
+                        {loading ? "Saving..." : "Save"}
                     </button>
                 </div>
             </form>

@@ -49,21 +49,24 @@ export default function EditTask() {
 
   const fetchTaskDetails = async () => {
     try {
-
       const response = await taskDetail(currentTaskId, token);
       const task = response?.data?.result;
 
       setTask(task);
-      console.log('task popup', task);
+      console.log("task popup", task);
 
       if (task) {
         setCategory(task.categories || "");
         setTitle(task.title || "");
         setDescription(task.description || "");
-        setDeadline(task.deadline ? new Date(task.deadline).toISOString().split("T")[0] : "");
+        setDeadline(
+          task.deadline
+            ? new Date(task.deadline).toISOString().split("T")[0]
+            : ""
+        );
         setEmergentLevel(task.emergent_level || "");
         setProgress(task.progress || "");
-        setEmail(task.email || "");
+        setEmail(task.user_assign.email || "");
       }
     } catch (error) {
       console.error("Error fetching task details: ", error);
@@ -94,11 +97,17 @@ export default function EditTask() {
         deadline: deadline ? new Date(deadline).toISOString() : "",
         emergent_level,
         progress,
-        email
+        email,
       };
 
       // Validate fields
-      if (!categories || !title || !description || !deadline || !emergent_level) {
+      if (
+        !categories ||
+        !title ||
+        !description ||
+        !deadline ||
+        !emergent_level
+      ) {
         alert("All fields are required.");
         return;
       }
@@ -117,7 +126,7 @@ export default function EditTask() {
     return null;
   }
 
-  //delete task 
+  //delete task
   const handleDeleteTask = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -126,7 +135,7 @@ export default function EditTask() {
       const response = await taskDelete(currentTaskId, token);
 
       if (response) {
-        console.log("Task updated successfully:", response);
+        console.log("Task delete successfully:", response);
         hidePopup();
       }
     } catch (error) {
@@ -134,14 +143,11 @@ export default function EditTask() {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <form
-        ref={contentRef}
-        className="p-8 bg-gray-50 w-[500px] rounded-xl"
-      >
+      <form ref={contentRef} className="p-8 bg-gray-50 w-[500px] rounded-xl">
         <h1 className="text-xl">Task Details: {task.title}</h1>
         <div className="my-8">
           <div className="mb-3 flex items-center justify-between">
@@ -264,6 +270,7 @@ export default function EditTask() {
               <input
                 type="email"
                 id="email"
+                value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="border border-slate-200 rounded-xl py-2 px-8"
               />
@@ -271,6 +278,28 @@ export default function EditTask() {
           </div>
         </div>
         <div className="flex justify-end">
+          <button
+            onClick={hidePopup}
+            className="bg-lighter-blue text-black hover:bg-blue-hover py-2 px-8 rounded-lg"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={handleDeleteTask}
+            className="bg-lighter-blue mx-3 text-black hover:bg-blue-hover py-2 px-8 rounded-lg"
+          >
+            {loading ? "Delete.." : "Delete"}
+          </button>
+          <button
+            type="button"
+            onClick={handleEditTask}
+            className=" bg-black text-white hover:text-[#ddd] py-2 px-8 rounded-lg"
+          >
+            {loading ? "Editing.." : "Edit"}
+          </button>
+        </div>
+        {/* <div className="flex justify-end">
           <button
             onClick={hidePopup}
             className="bg-lighter-blue text-black hover:bg-blue-hover py-2 px-8 rounded-lg"
@@ -291,7 +320,7 @@ export default function EditTask() {
           >
             {loading ? 'Editing..' : 'Edit'}
           </button>
-        </div>
+        </div> */}
       </form>
     </div>
   );
