@@ -144,7 +144,7 @@ export default function ProfileSide() {
           </div>
           <div>
             <button
-              className="flex items-center hover:bg-blue-hover bg-lighter-blue text-sky-800 rounded-xl py-2 px-8"
+              className="flex me-4 items-center hover:bg-blue-hover bg-lighter-blue text-sky-800 rounded-xl py-2 px-8"
               onClick={handleToggleContent}
             >
               <span>Edit Profile</span>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import echo from '../server/echo'; // Laravel Echo instance
 import { notificationData } from '../server/api'; // API for notifications
 import SideBar from '../components/SideBar';
+import Navbar from '../components/Navbar';
 
 const TaskNotifications = () => {
   const [notifications, setNotifications] = useState([]);
@@ -40,7 +41,7 @@ const TaskNotifications = () => {
   }, [token]);
 
   useEffect(() => {
-    if (!userId) return; 
+    if (!userId) return;
 
     const channel = echo.private(`user.${userId}`);
 
@@ -57,25 +58,28 @@ const TaskNotifications = () => {
     <div>
       <SideBar />
       <div className="ms-32">
-        <h1>Task Notifications</h1>
-        {loading ? (
-          <p>Loading notifications...</p>
-        ) : error ? (
-          <p className="text-red-500">{error}</p>
-        ) : (
-          <ul>
-            {notifications.length > 0 ? (
-              notifications.map((notification, index) => (
-                <li key={index}>
-                  <p>{notification.message}</p>
-                  <small>{new Date(notification.created_at).toLocaleString()}</small>
-                </li>
-              ))
-            ) : (
-              <p>No notifications available.</p>
-            )}
-          </ul>
-        )}
+        <Navbar />
+        <div className='pt-24'>
+          <h1 className='text-xl'>Task Notifications</h1>
+          {loading ? (
+            <p className='mt-4'>Loading notifications...</p>
+          ) : error ? (
+            <p className="text-red-500">{error}</p>
+          ) : (
+            <ul>
+              {notifications.length > 0 ? (
+                notifications.map((notification, index) => (
+                  <li key={index}>
+                    <p>{notification.message}</p>
+                    <small>{new Date(notification.created_at).toLocaleString()}</small>
+                  </li>
+                ))
+              ) : (
+                <p className='text-center mt-24'>No notifications available.</p>
+              )}
+            </ul>
+          )}
+        </div>
       </div>
     </div>
   );

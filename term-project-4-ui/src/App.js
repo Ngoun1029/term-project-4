@@ -12,6 +12,8 @@ import EmailVerify from './pages/login-pages/EmailVerify';
 import EmailVerifyCode from './pages/login-pages/EmailVerifyCode';
 import TaskNotifications from './pages/notification-list-data';
 import History from './pages/History';
+import TaskAssigned from './components/home/TaskAssigned';
+import UpdateAssignTask from './components/actions/UpdateAssignTask';
 
 function App() {
   return (
@@ -25,9 +27,11 @@ function App() {
         <Route path='/email-verify-code' element={<EmailVerifyCode/>}/>
         <Route path='/notification' element={<TaskNotifications/>}/>
         <Route path='/history' element={<History/>}/>
+        <Route path='/task-assigned' element={<TaskAssigned/> } />
       </Routes>
       <CreateNewTask/>
       <EditTask/>
+      <UpdateAssignTask/>
     </PopupProvider>
   );
 }

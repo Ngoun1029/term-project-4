@@ -17,6 +17,7 @@ export default function EditTask() {
   const [email, setEmail] = useState("");
   const [task, setTask] = useState('');
 
+
   const [loading, setLoading] = useState(false);
 
   const token = localStorage.getItem("token");
@@ -93,7 +94,7 @@ export default function EditTask() {
         description,
         deadline: deadline ? new Date(deadline).toISOString() : "",
         emergent_level,
-        // progress,
+        progress,
         email
       };
 

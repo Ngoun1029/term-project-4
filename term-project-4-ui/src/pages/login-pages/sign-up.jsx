@@ -70,7 +70,7 @@ export default function SignUp() {
 
     return (
         <div className="min-h-screen flex justify-center items-center bg-gray-100">
-          <div className="bg-white p-8 rounded-lg shadow-lg w-96">
+          <div className="bg-white p-8 rounded-lg shadow-lg w-[450px] mt-6">
             <h2 className="text-2xl font-bold text-center mb-6 text-black">Sign Up</h2>
     
             <form onSubmit={handleSubmit}>
@@ -212,13 +212,13 @@ export default function SignUp() {
                 />
               </div>
     
-              <div className='mb-6 text-md'>Already have an account? <Link to='/' className='italic'>Log In</Link></div>
+              <div className='mb-6 text-md'>Already have an account? <Link to='/' className='italic text-blue-600'>Log In</Link></div>
     
               {/* Submit Button */}
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-2 px-4 bg-black text-white font-semibold rounded-lg hover:bg-blue-600 disabled:bg-blue-300"
+                className="w-full py-2 px-4 bg-black font-semibold rounded-lg text-white hover:text-blue-800 hover:bg-lighter-blue disabled:bg-blue-hover"
               >
                 {loading ? 'Signing up...' : 'Sign Up'}
               </button>

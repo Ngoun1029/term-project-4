@@ -8,20 +8,13 @@ export const PopupProvider = ({ children }) => {
     //store unique id for each task
     const [currentTaskId, setCurrentTaskId] = useState(null);
 
-    // const showPopup = (popupType, taskId = null) => {
-    //     setActivePopup(popupType);
-
-    //     //if it's an edit form store a unique id get from task
-    //     if (popupType === 'editTask' && taskId) {
-    //         setCurrentTaskId(taskId);
-    //     } else if (popupType === 'deleteTask' && taskId) {
-    //         setCurrentTaskId(taskId);
-    //     }
-    // };
-
     const showPopup = (popupType, taskId = null) => {
         setActivePopup(popupType);
-        setCurrentTaskId(popupType === 'editTask' ? taskId:null || popupType === 'deleteTask' ? taskId : null );
+        setCurrentTaskId(
+            popupType === 'editTask' ? taskId : null ||
+                popupType === 'deleteTask' ? taskId : null ||
+                    popupType === 'updateTask' ? taskId : null
+        );
     };
 
 
