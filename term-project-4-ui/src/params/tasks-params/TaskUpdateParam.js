@@ -6,5 +6,5 @@ export const TaskUpdateParam = {
     deadline : '',
     emergent_level : '',
     progress : '',
-    email: ''
+    email: '',
 }
