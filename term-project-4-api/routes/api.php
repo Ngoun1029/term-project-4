@@ -8,6 +8,7 @@ use App\Http\Controllers\User\NotificationController;
 use App\Http\Controllers\User\SettingController;
 use App\Http\Controllers\User\TaskController;
 use App\Http\Controllers\User\UserController;
+use App\Models\Task;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -54,7 +55,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //user assigner
     Route::post('/task-assigned-view/data',[TaskController::class, 'viewAssignTask']);
     Route::post('/task-update-progrss', [TaskController::class,'update']); 
-    
+    Route::get('/task-assign-detail/{id}', [TaskController::class, 'taskAssignDetail']);
+
     //history
     Route::post('/history-view/data', [HistoryController::class, 'view']);
     Route::get('/history-detail/{id}', [HistoryController::class, 'show']);

@@ -5,7 +5,7 @@ import { MdOutlineEmergencyShare, MdOpenInNew } from "react-icons/md";
 import { LuPencilLine } from "react-icons/lu";
 import { usePopup } from "../context/PopupContext";
 import { MdOutlineAttachEmail } from "react-icons/md";
-import { taskDelete, taskDetail, taskUpdate, taskUpdateProgress } from "../../server/api";
+import { taskAssignDetail, taskDelete, taskDetail, taskUpdate, taskUpdateProgress } from "../../server/api";
 
 export default function UpdateAssignTask() {
     const [categories, setCategory] = useState("loading..");
@@ -39,7 +39,7 @@ export default function UpdateAssignTask() {
 
 
     useEffect(() => {
-        if (currentTaskId && activePopup === "editTask") {
+        if (currentTaskId && activePopup === "updateTask") {
             fetchTaskDetails();
         } else {
             resetFormFields();
@@ -49,10 +49,10 @@ export default function UpdateAssignTask() {
     const fetchTaskDetails = async () => {
         try {
 
-            const response = await taskDetail(currentTaskId, token);
+            const response = await taskAssignDetail(currentTaskId, token);
             const task = response?.data?.result;
 
-            assignTask(task);
+            // assignTask(task);
             console.log('task popup', task);
 
             if (task) {
@@ -62,14 +62,14 @@ export default function UpdateAssignTask() {
                 setDeadline(task.deadline ? new Date(task.deadline).toISOString().split("T")[0] : "");
                 setEmergentLevel(task.emergent_level || "");
                 setProgress(task.progress || "");
-                // setEmail(task.email || "");
-                setEmail(task.user_assign.email);
+                setEmail(task.user_assign.email || "");
             }
         } catch (error) {
             console.error("Error fetching task details: ", error);
         }
     };
 
+    //loading 
     const resetFormFields = () => {
         setCategory("Loading...");
         setTitle("Loading...");
@@ -80,13 +80,14 @@ export default function UpdateAssignTask() {
         setEmail("");
     };
 
+    // edit task event
     const handleEditTask = async (e) => {
         e.preventDefault();
         setLoading(true);
 
         try {
             const param = {
-                task_id: currentTaskId,
+                taskId: currentTaskId,
                 progress,
             };
             console.log(currentTaskId, progress);
@@ -224,6 +225,7 @@ export default function UpdateAssignTask() {
                                     progress
                                 </option>
                                 <option value="pending">Pending</option>
+                                <option value="progress">Progress</option>
                                 <option value="complete">Complete</option>
                             </select>
                         </div>

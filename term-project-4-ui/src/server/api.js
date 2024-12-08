@@ -335,6 +335,22 @@ export const taskAssignedData = async(TaskAssignedDataParam, token)=>{
     }
 }
 
+export const taskAssignDetail = async (taskId, token) => {
+    try {
+        const response = await url.get(`/api/task-assign-detail/${taskId}`, {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "X-CSRF-TOKEN": "",
+                "Content-Type": "application/json",
+            },
+        });
+        return response.data;
+    }
+    catch (error) {
+        console.log('error message:', error);
+    }
+}
+
 export const taskUpdateProgress = async(TaskProgressUpdateParam, token)=>{
     const param = TaskProgressUpdateParam;
     try{

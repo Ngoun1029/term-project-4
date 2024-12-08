@@ -152,6 +152,7 @@ class LoginController extends Controller
 
                         'user:task-assign-view',
                         'user:task-update',
+                        'user:task-assign-detail',
 
                         //history
                         'user:history-view',
@@ -267,6 +268,7 @@ class LoginController extends Controller
 
                         'user:task-assign-view',
                         'user:task-update',
+                        'user:task-assign-detail',
 
                         //notification
                         'user:notification-view',

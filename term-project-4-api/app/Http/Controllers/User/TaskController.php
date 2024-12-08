@@ -419,6 +419,73 @@ class TaskController extends Controller
         }
     }
 
+    public function taskAssignDetail(string $id)
+    {
+        try {
+
+            if (!Auth::check()) {
+                return response()->json([
+                    'verified' => false,
+                    'status' => 'error',
+                    'message' => 'please login'
+                ]);
+            }
+
+            if (Auth::user()->tokenCan('user:task-assign-detail')) {
+                $users = Auth::user();
+                $tasks = Task::where('id', $id)->first();
+
+                // Get the assigned user ID from the task
+                $userAssignId = $tasks->assign_user_id;
+
+                // Fetch the assigned user(s)
+                $user_assigns = User::where('id', $userAssignId)->get()->keyBy('id');
+                $userDetailAssignId = $user_assigns->pluck('id');
+
+                // Fetch user details
+                $user_detail_assigns = UserDetail::whereIn('user_id', $userDetailAssignId)->get()->keyBy('user_id');
+
+                // Fetch specific user assign and details
+                $user_assign = $user_assigns->get($userAssignId) ?? null;
+                $user_detail_assign = $user_assign ? $user_detail_assigns->get($user_assign->id) : null;
+
+                // Modify user detail assign if it exists
+                if ($user_detail_assign) {
+                    $user_detail_assign->profile_picture = $this->masterController->appendBaseUrl(
+                        $user_detail_assign->profile_picture,
+                        'user-profile'
+                    );
+                }
+
+                // Add user assign details to the task
+                $tasks['user_assign'] = $user_assign;
+                if ($user_assign) {
+                    $user_assign['user_detail_assign'] = $user_detail_assign;
+                }
+                return response()->json([
+                    'verified' => true,
+                    'status' => 'success',
+                    'message' => 'found',
+                    'data' => [
+                        'result' => $tasks
+                    ]
+                ], 200);
+            } else {
+                return response()->json([
+                    'verified' => false,
+                    'status' => 'error',
+                    'message' => 'no accessible',
+                ], 403);
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'verified' => false,
+                'status' => 'error',
+                'message' => Str::limit($e->getMessage(), 150, '...'),
+            ], 500);
+        }
+    }
+
     public function viewAssignTask(Request $request){
         try{
             if(!Auth::check()){
@@ -517,7 +584,7 @@ class TaskController extends Controller
             }
 
             $validator = Validator::make($request->all(), [
-                'taskId' => 'required|string',
+                'taskId' => 'required|numeric',
                 'progress' => 'required|string',
 
             ]);
