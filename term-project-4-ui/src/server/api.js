@@ -145,7 +145,7 @@ export const removeVerificationCode = async (RemoveVerificationCodeParam) => {
 }
 
 //user
-export const userProfile = async (token) => {
+export const userProfile = async (token) => { 
     try {
         const response = await url.get('/api/user-profile', {
             headers: {
@@ -160,7 +160,6 @@ export const userProfile = async (token) => {
         console.log('error message:', error);
     }
 }
-
 
 export const userEdit = async (UserUpdateParam, token) => {
     const formData = new FormData();

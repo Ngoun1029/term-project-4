@@ -14,6 +14,7 @@ import TaskNotifications from './pages/notification-list-data';
 import History from './pages/History';
 import TaskAssigned from './components/home/TaskAssigned';
 import UpdateAssignTask from './components/actions/UpdateAssignTask';
+import UpdatePf from './components/actions/UpdatePf';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
       <CreateNewTask/>
       <EditTask/>
       <UpdateAssignTask/>
+      <UpdatePf/>
     </PopupProvider>
   );
 }

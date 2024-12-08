@@ -119,9 +119,7 @@ export default function EditTask() {
 
   //delete task 
   const handleDeleteTask = async (e) => {
-
     e.preventDefault();
-
     setLoading(true);
 
     try {

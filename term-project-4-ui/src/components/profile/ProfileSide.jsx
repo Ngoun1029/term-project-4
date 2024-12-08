@@ -6,7 +6,8 @@ import { LiaBirthdayCakeSolid } from "react-icons/lia";
 import { FiPhone } from "react-icons/fi";
 import { BsPencilSquare } from "react-icons/bs";
 import { informationEdit, userProfile, logout } from '../../server/api';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { usePopup } from '../context/PopupContext';
 
 
 export default function ProfileSide() {
@@ -17,6 +18,8 @@ export default function ProfileSide() {
     const [birthdate, setBirthdate] = useState('');
     const [loading, setLoading] = useState(false);
     const [profilePicture, setProfilePicture] = useState('');
+
+    const { showPopup } = usePopup();
 
     const navigate = useNavigate();
     // Toggle edit information
@@ -29,8 +32,6 @@ export default function ProfileSide() {
     const handleToggleContent = () => {
         setEditInfoContent(prev => !prev);
     };
-
-    
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -145,7 +146,7 @@ export default function ProfileSide() {
           <div>
             <button
               className="flex me-4 items-center hover:bg-blue-hover bg-lighter-blue text-sky-800 rounded-xl py-2 px-8"
-              onClick={handleToggleContent}
+              onClick={() => showPopup('updatePf')}
             >
               <span>Edit Profile</span>
               <span className="ms-1 text-lg">

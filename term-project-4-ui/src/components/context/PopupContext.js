@@ -13,7 +13,8 @@ export const PopupProvider = ({ children }) => {
         setCurrentTaskId(
             popupType === 'editTask' ? taskId : null ||
                 popupType === 'deleteTask' ? taskId : null ||
-                    popupType === 'updateTask' ? taskId : null
+                    popupType === 'updateTask' ? taskId : null ||
+                        popupType === 'updatePf' ? taskId : null
         );
     };
 
