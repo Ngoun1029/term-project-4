@@ -65,9 +65,13 @@ export default function TaskAssigned() {
             {loading ? (
                 <p className="mt-40">Loading...</p>
             ) : assignedTasks.length === 0 ? (
-                <p className="mt-40">No tasks available.</p>
+                <div className='mt-40'>
+                    <h1 className='text-3xl font-medium mb-6'>Assigned Tasks</h1>
+                    <p>No tasks available.</p>
+                </div>
             ) : (
                 <>
+                    <h1 className='text-3xl font-medium mt-40 mb-6'>Assigned Tasks</h1>
                     <div className="flex flex-wrap gap-4 mt-40">
                         {assignedTasks.map((task) => (
                             <div
@@ -88,19 +92,19 @@ export default function TaskAssigned() {
                         ))}
                     </div>
 
-                    <div className="flex justify-center mt-8">
+                    <div className="flex justify-between w-[95%] mt-8">
                         <button
                             onClick={() => handlePageChange('prev')}
                             disabled={currentPage === 1}
-                            className={`py-2 px-4 rounded-l-lg ${currentPage === 1 ? 'bg-gray-300' : 'bg-blue-500 text-white'}`}
+                            className={`rounded-xl text-blue-800 hover:bg-blue-hover py-2 px-8 ${currentPage === 1 ? 'bg-lighter-blue' : 'bg-blue-hover'}`}
                         >
                             Prev
                         </button>
-                        <div className="px-4 py-2">{`${currentPage} / ${totalPages}`}</div>
+                        <div className="px-4 py-2">Page {`${currentPage} of ${totalPages}`}</div>
                         <button
                             onClick={() => handlePageChange('next')}
                             disabled={currentPage === totalPages}
-                            className={`py-2 px-4 rounded-r-lg ${currentPage === totalPages ? 'bg-gray-300' : 'bg-blue-500 text-white'}`}
+                            className={`rounded-xl text-blue-800 hover:bg-blue-hover py-2 px-8 ${currentPage === totalPages ? 'bg-lighter-blue' : 'bg-blue-hover'}`}
                         >
                             Next
                         </button>

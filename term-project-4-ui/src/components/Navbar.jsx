@@ -99,7 +99,12 @@ export default function Navbar({ openLeftBar, handleToggleLeftBar }) {
                             <h1 className='text-xl' >{username}</h1>
                             <p className='opacity-50'>user</p>
                         </div>
-                        <Link to='/profile'> <img src={profilePicture} alt="" className='object-fit w-[50px] h-[50px] border-[1.5px] ms-2 border-black rounded-full' /></Link>
+                        <Link to='/profile'>
+                            {profilePicture ?
+                                < img src={profilePicture} alt="" className='object-fit w-[50px] h-[50px] border-[1.5px] ms-2 border-black rounded-full' /> :
+                                <div className='bg-slate-100 w-[50px] h-[50px] border-[1.5px] ms-2 border-black rounded-full'></div>
+                            }
+                        </Link>
                     </div>
                 </div>
             </div>

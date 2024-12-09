@@ -25,7 +25,7 @@ export default function FetchHistory() {
                 const result = data.data?.result || {};
 
                 console.log(result);
-                
+
                 setHistoryList(result.data || []);
                 setCurrentPage(result.current_page || 1);
                 setTotalPages(Math.ceil(result.total / result.per_page) || 0);
@@ -73,7 +73,6 @@ export default function FetchHistory() {
     return (
         <div className="pe-8 pt-24">
             <h1 className="text-xl font-bold mb-4">History Data</h1>
-
             {/* Loading and error messages */}
             {loading && <p>Loading...</p>}
             {error && <p className="text-red-500">{error}</p>}
@@ -120,7 +119,6 @@ export default function FetchHistory() {
                     <p><strong>ID:</strong> {selectedHistory.id}</p>
                     <p><strong>Title:</strong> {selectedHistory.title}</p>
                     <p><strong>Description:</strong> {selectedHistory.description}</p>
-                    {/* Include additional fields if available */}
                 </div>
             )}
         </div>

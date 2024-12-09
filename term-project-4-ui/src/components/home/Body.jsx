@@ -12,14 +12,22 @@ export default function Body() {
   const { clicked } = location.state || {};
 
   console.log(clicked);
-  
+
 
   return (
     <div className='ms-36'>
       <Navbar />
-      <Sort/>
-      { clicked === 'tasks' && <DisplayTasks />}
-      { clicked === 'assignedTask' && <TaskAssigned/> }
+      <Sort />
+      {clicked === 'all' &&
+        <>
+          <DisplayTasks />
+          <div style={{transform: 'translateY(-220px)'}}>
+            <TaskAssigned />
+          </div>
+        </>
+      }
+      {clicked === 'tasks' && <DisplayTasks />}
+      {clicked === 'assignedTask' && <TaskAssigned />}
     </div>
   )
 }

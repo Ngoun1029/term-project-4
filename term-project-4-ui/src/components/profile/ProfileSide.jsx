@@ -8,6 +8,7 @@ import { BsPencilSquare } from "react-icons/bs";
 import { informationEdit, userProfile, logout } from '../../server/api';
 import { Link, useNavigate } from "react-router-dom";
 import { usePopup } from "../context/PopupContext";
+import { IoSettingsOutline } from "react-icons/io5";
 
 export default function ProfileSide() {
   // Edit data
@@ -54,8 +55,8 @@ export default function ProfileSide() {
         // Format the birthdate to 'yyyy-MM-dd' for the input
         const formattedBirthdate = response.data.result.user_details?.birthdate
           ? new Date(response.data.result.user_details.birthdate)
-              .toISOString()
-              .split("T")[0]
+            .toISOString()
+            .split("T")[0]
           : "";
         setBirthdate(formattedBirthdate);
       } catch (error) {
@@ -124,28 +125,51 @@ export default function ProfileSide() {
     }
   };
 
+  // toggle setting dropdown
+  const [settingDropDown, setSettingDropDown] = useState(false);
+
+  const handleSettingDropdown = () => {
+    setSettingDropDown(prev => !prev);
+  }
+
   return (
     <div className="ms-36 pt-8">
       {/* User Profile */}
       <div className="flex items-center justify-between">
         <div className="flex items-center">
-          <img
-            src={profilePicture}
-            alt="User Profile"
-            className="object-fit w-[150px] h-[150px] border-[2px] border-black rounded-full"
-          />
+          <div>
+            {profilePicture ?
+              <img
+                src={profilePicture}
+                alt="User Profile"
+                className="object-cover w-[150px] h-[150px] border-[2px] border-black rounded-full"
+              /> :
+              <div className="bg-slate-100 w-[150px] h-[150px] border-[2px] border-black rounded-full"></div>}
+          </div>
           <div className="ms-6">
             <h1 className="text-3xl font-medium">
-              {userInfo?.first_name} {userInfo?.last_name}
+              {
+                userInfo ?
+                  <div>
+                    {userInfo?.first_name} {userInfo?.last_name}
+                  </div> :
+                  <p>Loading...</p>
+              }
             </h1>
             <p className="opacity-50 italic text-md">
-              @{userInfo?.user_details?.user_name}
+              {
+                userInfo ?
+                  <div>
+                    @{userInfo?.user_details?.user_name}
+                  </div> :
+                  <p>loading..</p>
+              }
             </p>
           </div>
         </div>
-        <div>
+        <div className='flex'>
           <button
-            className="flex me-4 items-center hover:bg-blue-hover bg-lighter-blue text-sky-800 rounded-xl py-2 px-8"
+            className="flex me-2 items-center hover:bg-blue-hover bg-lighter-blue text-sky-800 rounded-xl py-2 px-8"
             onClick={() => showPopup("updatePf")}
           >
             <span>Edit Profile</span>
@@ -153,6 +177,33 @@ export default function ProfileSide() {
               <AiOutlineEdit />
             </span>
           </button>
+
+          {/* setting for email and password changing  */}
+          <div className="relatvie">
+            <button
+              onClick={handleSettingDropdown}
+              className="flex me-4 items-center bg-black text-white hover:text-[#ddd] rounded-xl py-2 px-8"
+            >
+              <span>Setting</span>
+              <span className="ms-1 text-lg">
+                <IoSettingsOutline />
+              </span>
+            </button>
+
+            {/* dropdown */}
+            <ul className={`${settingDropDown ? '' : 'hidden'} bg-slate-100 absolute top-[140px] py-4 ps-4 pe-14 rounded-xl`}>
+              <li>
+                <Link to="/email-verify">
+                  Password
+                </Link>
+              </li>
+              <li>
+                <Link to="/email-verify">
+                  Email
+                </Link>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
 
@@ -261,22 +312,6 @@ export default function ProfileSide() {
           </ul>
         </div>
       )}
-      <div>
-        <div className="mt-8 flex justify-start">
-          <Link to="/email-verify">
-            <button className="py-2 px-8 rounded-xl bg-black text-white hover:text-[#ddd]">
-              Password
-            </button>
-          </Link>
-        </div>
-        <div className="mt-8 flex justify-start">
-          <Link to="/email-verify">
-            <button className="py-2 px-8 rounded-xl bg-black text-white hover:text-[#ddd]">
-              Email
-            </button>
-          </Link>
-        </div>
-      </div>
       <div className="mt-8 flex justify-start">
         <button
           onClick={handleLogout}

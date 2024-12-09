@@ -20,7 +20,7 @@ export default function History() {
     param.page = page;
     param.range = 10;
     const token = localStorage.getItem('token');
-    
+
     try {
       setLoading(true);
       const response = await historyData(param, token);
@@ -55,43 +55,63 @@ export default function History() {
   return (
     <div>
       <SideBar />
-      <div className="ms-32">
+      <div className="ms-32"> 
         <Navbar />
         <div className='pt-24'>
-          <h1 className='text-xl'>Task History</h1>
+          <h1 className='text-3xl font-medium'>Task History</h1>
           {loading ? (
             <p className='mt-4'>Loading History...</p>
           ) : error ? (
             <p className="text-red-500">{error}</p>
           ) : (
-            <ul>
-              {historys.length > 0 ? (
-                historys.map((history, index) => (
-                  <li key={index}>
-                    <p>{history.title}</p>
-                    <small>{new Date(history.created_at).toLocaleString()}</small>
-                  </li>
-                ))
-              ) : (
-                <p className='text-center mt-24'>No history available.</p>
-              )}
-            </ul>
+            <div className="max-w-[98%]">
+              <table className="table-auto w-full mt-6">
+                <thead>
+                  <tr className="text-left">
+                    <th className='pb-6 text-lg'>Title</th>
+                    <th className='pb-6 text-lg'>Created Date</th>
+                    <th className='pb-6 text-lg'>Deadline</th>
+                    <th className='pb-6 text-lg'>Emergent Level</th>
+                    <th className='pb-6 text-lg'>Progress</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {historys.length > 0 ? (
+                    historys.map((history, index) => (
+                      <tr key={index} >
+                        <td className='pb-4'>{history.title}</td>
+                        <td className='pb-4'>{new Date(history.created_at).toLocaleString()}</td>
+                        <td className='pb-4'>{new Date(history.deadline).toLocaleString()}</td>
+                        <td className='pb-4'>{history.emergent_level}</td>
+                        <td className='pb-4'>
+                          <span className='rouned-full p-2 bg-ligher-purple text-purple-800' style={{borderRadius: '12px'}}>{history.progress}</span>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="5" className="text-center mt-24">No history available.</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           )}
-          
+
           {/* Pagination Controls */}
-          <div className="pagination mt-4">
-            <button 
-              onClick={() => handlePageChange(pagination.currentPage - 1)} 
+          <div className="pagination mt-16 flex justify-between max-w-[95%]">
+            <button
+              onClick={() => handlePageChange(pagination.currentPage - 1)}
               disabled={pagination.currentPage === 1}
-              className="btn-prev"
+              className="btn-prev rounded-xl bg-lighter-blue text-blue-800 hover:bg-blue-hover py-2 px-8"
             >
               &laquo; Previous
             </button>
             <span className="mx-2">Page {pagination.currentPage} of {pagination.lastPage}</span>
-            <button 
-              onClick={() => handlePageChange(pagination.currentPage + 1)} 
+            <button
+              onClick={() => handlePageChange(pagination.currentPage + 1)}
               disabled={pagination.currentPage === pagination.lastPage}
-              className="btn-next"
+              className="btn-next rounded-xl bg-lighter-blue text-blue-800 hover:bg-blue-hover py-2 px-8"
             >
               Next &raquo;
             </button>

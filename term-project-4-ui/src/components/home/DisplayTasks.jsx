@@ -26,7 +26,7 @@ export default function DisplayTasks() {
                 if (data && data.status === 'success' && data.data?.result) {
                     const result = data.data.result;
                     console.log(result);
-                    
+
                     setTasks(result.data || []);
                     setCurrentPage(result.current_page);
                     setTotalPages(Math.ceil(result.total / result.per_page));
@@ -77,10 +77,14 @@ export default function DisplayTasks() {
             {loading ? (
                 <p className="mt-40">Loading...</p>
             ) : tasks.length === 0 ? (
-                <p className="mt-40">No tasks available.</p>
+                <div className='mt-40'>
+                    <h1 className='text-3xl font-medium mb-6'>Assigned Tasks</h1>
+                    <p>No tasks available.</p>
+                </div>
             ) : (
                 <>
-                    <div className="flex flex-wrap gap-4 mt-40">
+                    <h1 className='text-3xl font-medium mt-40 mb-6'>Tasks</h1>
+                    <div className="flex flex-wrap gap-4">
                         {tasks.map((task) => (
                             <div
                                 onClick={() => showPopup('editTask', task.id)}
@@ -100,19 +104,19 @@ export default function DisplayTasks() {
                         ))}
                     </div>
 
-                    <div className="flex justify-center mt-8">
+                    <div className="flex justify-between mt-8 w-[95%]">
                         <button
                             onClick={() => handlePageChange('prev')}
                             disabled={currentPage === 1}
-                            className={`py-2 px-4 rounded-l-lg ${currentPage === 1 ? 'bg-gray-300' : 'bg-blue-500 text-white'}`}
+                            className={`rounded-xl text-blue-800 hover:bg-blue-hover py-2 px-8 ${currentPage === 1 ? 'bg-lighter-blue' : 'bg-blue-hover'}`}
                         >
                             Prev
                         </button>
-                        <div className="px-4 py-2">{`${currentPage} / ${totalPages}`}</div>
+                        <div className="px-4 py-2">Page {`${currentPage} of ${totalPages}`}</div>
                         <button
                             onClick={() => handlePageChange('next')}
                             disabled={currentPage === totalPages}
-                            className={`py-2 px-4 rounded-r-lg ${currentPage === totalPages ? 'bg-gray-300' : 'bg-blue-500 text-white'}`}
+                            className={`rounded-xl text-blue-800 hover:bg-blue-hover py-2 px-8 ${currentPage === totalPages ? 'bg-lighter-blue' : 'bg-blue-hover'}`}
                         >
                             Next
                         </button>

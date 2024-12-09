@@ -3,6 +3,7 @@ import echo from '../server/echo'; // Laravel Echo instance
 import { notificationData } from '../server/api'; // API for notifications
 import SideBar from '../components/SideBar';
 import Navbar from '../components/Navbar';
+import { TbNotification } from "react-icons/tb";
 
 const TaskNotifications = () => {
   const [notifications, setNotifications] = useState([]);
@@ -60,7 +61,7 @@ const TaskNotifications = () => {
       <div className="ms-32">
         <Navbar />
         <div className='pt-24'>
-          <h1 className='text-xl'>Task Notifications</h1>
+          <h1 className='text-3xl font-medium mb-8'>Task Notifications</h1>
           {loading ? (
             <p className='mt-4'>Loading notifications...</p>
           ) : error ? (
@@ -69,9 +70,12 @@ const TaskNotifications = () => {
             <ul>
               {notifications.length > 0 ? (
                 notifications.map((notification, index) => (
-                  <li key={index}>
-                    <p>{notification.message}</p>
-                    <small>{new Date(notification.created_at).toLocaleString()}</small>
+                  <li key={index} className='flex items-center'>
+                    <div style={{borderRadius: "100%"}} className='bg-lighter-blue p-5 me-3 text-blue-800'><TbNotification /></div>
+                    <div>
+                      <p>{notification.message}</p>
+                      <small>{new Date(notification.created_at).toLocaleString()}</small>
+                    </div>
                   </li>
                 ))
               ) : (
